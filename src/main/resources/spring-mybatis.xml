@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- 扫描类包，将标注Spring注解的类自动转化Bean,同时完成Bean的注入 -->
+	<context:component-scan base-package="ssm.com.zhang">
+		<!-- 对controller包中的 Controller去除，他们是在dispatcher-servlet.xml中配置的，如果不去除会影响事务管理的 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 引入 jdbc.properties 属性文件 -->
+	<!--<context:property-placeholder ignore-unresolvable="true" location="classpath:jdbc.properties" />-->
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties"/>
+	</bean>
+
+	<!-- 定义使用 DBCP 实现的数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		  destroy-method="close"
+		  p:driverClassName="${jdbc.driver}"
+		  p:url="${jdbc.url}"
+		  p:username="${jdbc.username}"
+		  p:password="${jdbc.password}"
+		  p:initialSize="${jdbc.initialSize}"
+		  p:maxActive="${jdbc.maxActive}"
+		  p:maxIdle="${jdbc.maxIdle}"
+		  p:minIdle="${jdbc.minIdle}"
+		  p:maxWait="${jdbc.maxWait}">
+	</bean>
+
+	<!-- 配置SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		  p:dataSource-ref="dataSource"
+		  p:mapperLocations="classpath*:mapping/*.xml">
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		  p:basePackage="ssm.com.zhang"
+		  p:sqlSessionFactoryBeanName="sqlSessionFactory">
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		  p:dataSource-ref="dataSource">
+	</bean>
+
+	<!-- 通过注解方式配置事务 -->
+	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
+
+</beans>
