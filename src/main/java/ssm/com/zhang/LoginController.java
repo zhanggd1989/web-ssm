@@ -21,7 +21,6 @@ public class LoginController {
     @RequestMapping("/index")
     public String login(HttpServletRequest request) {
         System.out.println(request.getParameter("userName") + ":" + request.getParameter("password"));
-
         return "index";
     }
 }
