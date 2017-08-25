@@ -2,20 +2,18 @@ package ssm.com.zhang.sys.domain;
 
 import java.util.Date;
 
-public class resource {
+public class Organization {
     private Integer id;
 
     private String name;
 
-    private String url;
-
-    private Integer sequence;
+    private String sequence;
 
     private String icon;
 
     private String type;
 
-    private String description;
+    private String address;
 
     private String pid;
 
@@ -47,20 +45,12 @@ public class resource {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
-
-    public Integer getSequence() {
+    public String getSequence() {
         return sequence;
     }
 
-    public void setSequence(Integer sequence) {
-        this.sequence = sequence;
+    public void setSequence(String sequence) {
+        this.sequence = sequence == null ? null : sequence.trim();
     }
 
     public String getIcon() {
@@ -79,12 +69,12 @@ public class resource {
         this.type = type == null ? null : type.trim();
     }
 
-    public String getDescription() {
-        return description;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     public String getPid() {

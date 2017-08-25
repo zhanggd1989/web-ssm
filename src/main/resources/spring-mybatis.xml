@@ -42,6 +42,18 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
 		  p:dataSource-ref="dataSource"
 		  p:mapperLocations="classpath*:mapping/*.xml">
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<!--使用下面的方式配置参数，一行配置一个 -->
+						<value>
+							reasonable=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
 	</bean>
 
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->

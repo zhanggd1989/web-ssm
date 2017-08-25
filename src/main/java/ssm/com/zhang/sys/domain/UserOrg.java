@@ -1,6 +1,6 @@
 package ssm.com.zhang.sys.domain;
 
-public class userOrg {
+public class UserOrg {
     private Integer id;
 
     private Integer userId;

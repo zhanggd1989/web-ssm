@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="${ctx}/statics/css/index/index.css">
     <script src="./../statics/js/index/dynamic_tabs.js"></script>
     <link rel="stylesheet" href="${ctx}/statics/css/index/dynamic_tabs.css">
-
 </head>
 <body style="padding: 50px">
 <div class="container-fluid">
@@ -52,19 +51,19 @@
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="2">
+                                <a href="#" id="2" rel="${ctx}/role/list">
                                     <i class="glyphicon glyphicon-asterisk"></i>
                                     <span>角色管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="3">
+                                <a href="#" id="3" rel="${ctx}/resource/list">
                                     <i class="glyphicon glyphicon-file"></i>
-                                    <span>源管管理</span>
+                                    <span>资源管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="4">
+                                <a href="#" id="4" rel="${ctx}/organization/list">
                                     <i class="glyphicon glyphicon-tasks"></i>
                                     <span>机构管理</span>
                                 </a>

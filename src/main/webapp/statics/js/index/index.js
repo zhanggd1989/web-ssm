@@ -8,11 +8,16 @@
     $(".leftMenu a").click(function () {
         var title = $(this).children('span').html();
         var url = $(this).attr('rel');
-        alert(url);
-        $('#myTab').addTabs({
-            "id": "tab" + $(this).attr('id'),
-            "title": title,
-            "content": url
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function( data ) {
+                $('#myTab').addTabs({
+                    "id": "tab" + $(this).attr('id'),
+                    "title": title,
+                    "content": data
+                });
+            }
         });
     });
 });

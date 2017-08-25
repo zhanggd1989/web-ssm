@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="ssm.com.zhang.sys.dao.organizationMapper" >
-  <resultMap id="BaseResultMap" type="ssm.com.zhang.sys.domain.organization" >
+<mapper namespace="ssm.com.zhang.sys.dao.ResourceMapper" >
+  <resultMap id="BaseResultMap" type="ssm.com.zhang.sys.domain.Resource" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="sequence" property="sequence" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
     <result column="icon" property="icon" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="pid" property="pid" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="del_flag" property="delFlag" jdbcType="CHAR" />
@@ -17,39 +18,42 @@
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, sequence, icon, type, address, pid, status, del_flag, create_user_id, create_date, 
-    update_user_id, update_date
+    id, name, url, sequence, icon, type, description, pid, status, del_flag, create_user_id, 
+    create_date, update_user_id, update_date
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from sys_organization
+    from sys_resource
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from sys_organization
+    delete from sys_resource
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="ssm.com.zhang.sys.domain.organization" >
-    insert into sys_organization (id, name, sequence, 
-      icon, type, address, pid, 
-      status, del_flag, create_user_id, 
-      create_date, update_user_id, update_date
-      )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sequence,jdbcType=VARCHAR}, 
-      #{icon,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{address,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, 
-      #{status,jdbcType=CHAR}, #{delFlag,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="ssm.com.zhang.sys.domain.Resource" >
+    insert into sys_resource (id, name, url, 
+      sequence, icon, type, 
+      description, pid, status, 
+      del_flag, create_user_id, create_date, 
+      update_user_id, update_date)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{sequence,jdbcType=INTEGER}, #{icon,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{description,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
+      #{delFlag,jdbcType=CHAR}, #{createUserId,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUserId,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="ssm.com.zhang.sys.domain.organization" >
-    insert into sys_organization
+  <insert id="insertSelective" parameterType="ssm.com.zhang.sys.domain.Resource" >
+    insert into sys_resource
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
       <if test="name != null" >
         name,
+      </if>
+      <if test="url != null" >
+        url,
       </if>
       <if test="sequence != null" >
         sequence,
@@ -60,8 +64,8 @@
       <if test="type != null" >
         type,
       </if>
-      <if test="address != null" >
-        address,
+      <if test="description != null" >
+        description,
       </if>
       <if test="pid != null" >
         pid,
@@ -92,8 +96,11 @@
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
       <if test="sequence != null" >
-        #{sequence,jdbcType=VARCHAR},
+        #{sequence,jdbcType=INTEGER},
       </if>
       <if test="icon != null" >
         #{icon,jdbcType=VARCHAR},
@@ -101,8 +108,8 @@
       <if test="type != null" >
         #{type,jdbcType=CHAR},
       </if>
-      <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="pid != null" >
         #{pid,jdbcType=VARCHAR},
@@ -127,14 +134,17 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="ssm.com.zhang.sys.domain.organization" >
-    update sys_organization
+  <update id="updateByPrimaryKeySelective" parameterType="ssm.com.zhang.sys.domain.Resource" >
+    update sys_resource
     <set >
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
       <if test="sequence != null" >
-        sequence = #{sequence,jdbcType=VARCHAR},
+        sequence = #{sequence,jdbcType=INTEGER},
       </if>
       <if test="icon != null" >
         icon = #{icon,jdbcType=VARCHAR},
@@ -142,8 +152,8 @@
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
       </if>
-      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="pid != null" >
         pid = #{pid,jdbcType=VARCHAR},
@@ -169,13 +179,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="ssm.com.zhang.sys.domain.organization" >
-    update sys_organization
+  <update id="updateByPrimaryKey" parameterType="ssm.com.zhang.sys.domain.Resource" >
+    update sys_resource
     set name = #{name,jdbcType=VARCHAR},
-      sequence = #{sequence,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      sequence = #{sequence,jdbcType=INTEGER},
       icon = #{icon,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
-      address = #{address,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
       pid = #{pid,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       del_flag = #{delFlag,jdbcType=CHAR},

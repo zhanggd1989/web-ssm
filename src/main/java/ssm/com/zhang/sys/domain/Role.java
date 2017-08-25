@@ -2,7 +2,7 @@ package ssm.com.zhang.sys.domain;
 
 import java.util.Date;
 
-public class role {
+public class Role {
     private Integer id;
 
     private String name;

@@ -63,7 +63,7 @@ $.fn.addTabs = function (options) {
     typeof options.content == "string" ? div.append(options.content) : div.html(options.content);
 
     var container = $(".tab-content");
-    container.load(options.content);;
+    container.append(div);
 
     //添加完成后显示div
     $(div).siblings().removeClass("active");

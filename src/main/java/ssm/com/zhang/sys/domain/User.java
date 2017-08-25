@@ -2,7 +2,8 @@ package ssm.com.zhang.sys.domain;
 
 import java.util.Date;
 
-public class user {
+public class User {
+
     private Integer id;
 
     private String loginName;

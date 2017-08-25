@@ -19,17 +19,17 @@
 	</context:component-scan>
 	
 	<!-- ②：启动Spring MVC的注解功能，完成请求和注解POJO的映射，添加拦截器，类级别的处理器映射 -->
-    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 	
 	<!-- ②：启动Spring MVC的注解功能，完成请求和注解POJO的映射，配置一个基于注解的定制的WebBindingInitializer，解决日期转换问题，方法级别的处理器映射 -->
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 	    <!-- 配置一下对json数据的转换 -->
 	    <property name="messageConverters">
 	    	<list>
 	    		<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 	    			<property name="supportedMediaTypes">
 						<list>
-					    	<value>text/html;charset=UTF-8</value>
+					    	<value>application/json;charset=UTF-8</value>
 					    </list>
 	    			</property>
 	    		</bean>
