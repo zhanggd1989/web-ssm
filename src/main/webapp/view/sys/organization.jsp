@@ -4,6 +4,9 @@
     <title>机构信息</title>
     <jsp:include page="../inc.jsp"></jsp:include>
     <script src="${ctx}/statics/js/sys/organization.js"></script>
+    <script src="${ctx}/statics/js/sys/jqx-all.js"></script>
+    <link rel="stylesheet" href="${ctx}/statics/css/sys/jqx.base.css">
+    <link rel="stylesheet" href="${ctx}/statics/css/sys/jqx.bootstrap.css">
 </head>
 <body>
 <!-- 机构添加/修改界面 -->
@@ -84,22 +87,8 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-hover table-bordered" id="organizationTable">
-                    <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th>排序</th>
-                        <th>图标</th>
-                        <th>类型</th>
-                        <th>联系地址</th>
-                        <th>上级机构</th>
-                        <th>状态</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div id="treeGrid">
+                </div>
             </div>
         </div>
     </div>

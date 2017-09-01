@@ -27,43 +27,43 @@ public class OrganizationService {
     /**
      * 获取所有Organization对象
      *
-     * @author brian.zhang
      * @param
      * @return java.util.List<ssm.com.zhang.sys.domain.Organization>
+     * @author brian.zhang
      * @date 8/25/2017 10:52
      */
     @Transactional(readOnly = true)
-    public List<Object> listAllOrganization() {
-
-        List<Organization> organizationList = organizationMapper.listAllOrganization();
-        return OragnizationTree(organizationList);
+    public List<Organization> listAllOrganizations() {
+        return organizationMapper.listAllOrganizations();
     }
 
-    public List<Object> OragnizationTree(List<Organization> organizationList) {
-        List<Object> list1 = new ArrayList<Object>();
+
+
+    public List<Map<String, Object>> oragnizationTree(List<Organization> organizationList) {
+        List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
         Map<String, Object> map1 = new HashMap<String, Object>();
-        for(Organization organization : organizationList) {
-            if(organization.getPid() == null) {
-                System.out.println("bbbb" + organization.getName());
+        for (Organization organization : organizationList) {
+            if (organization.getPid() == null) {
                 map1.put("text", organization.getName());
-                map1.put("nodes", organization.getId());
+                map1.put("nodes", organizationChildrenTree(organization.getId(), organizationList));
+                list1.add(map1);
             }
         }
-        list1.add(map1);
         return list1;
     }
 
-    public List<Object> OrganizationChildrenTree(Integer pid, List<Organization> organizationList) {
-        List<Object> list2 = new ArrayList<Object>();
-        Map<String, Object> map2 = new HashMap<String, Object>();
-        for(Organization organization : organizationList) {
-            if(String.valueOf(pid).equals(organization.getPid())) {
-                map2.put("text",organization.getName());
-                map2.put("nodes",OrganizationChildrenTree(organization.getId(), organizationList));
+    public List<Map<String, Object>> organizationChildrenTree(Integer pid, List<Organization> organizationList) {
+        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+        for (Organization organization : organizationList) {
+            if (String.valueOf(pid).equals(organization.getPid())) {
+                Map<String, Object> map2 = new HashMap<String, Object>();
+                map2.put("text", organization.getName());
+                if (organizationChildrenTree(organization.getId(), organizationList).size() != 0) {
+                    map2.put("nodes", organizationChildrenTree(organization.getId(), organizationList));
+                }
+                list2.add(map2);
             }
-
         }
-        list2.add(map2);
         return list2;
     }
 }

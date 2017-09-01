@@ -29,6 +29,8 @@ public class Organization {
 
     private Date updateDate;
 
+    private Organization children;
+
     public Integer getId() {
         return id;
     }
@@ -131,5 +133,13 @@ public class Organization {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Organization getChildren() {
+        return children;
+    }
+
+    public void setChildren(Organization children) {
+        this.children = children;
     }
 }

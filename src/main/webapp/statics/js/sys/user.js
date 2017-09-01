@@ -27,7 +27,7 @@ function loadPage(page) {
 
 // 加载用户信息
 function build_user(result) {
-    $("#user tbody").empty();
+    $("#userTable tbody").empty();
     var users = result.extend.userPage.list;
     $.each(users, function (index, item) {
         var loginName = $("<td></td>").append(item.loginName);

@@ -4,7 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import ssm.com.zhang.sys.domain.Msg;
+import ssm.com.zhang.sys.domain.Organization;
 import ssm.com.zhang.sys.service.OrganizationService;
+
+import java.util.List;
 
 /**
  * 机构管理
@@ -32,8 +37,18 @@ public class OrganizationController {
         return "sys/organization";
     }
 
-    @RequestMapping(value = "/getOrganizations", method = RequestMethod.GET)
-    public void getOrganization() {
-        System.out.println(organizationService.listAllOrganization());
+    /**
+     * 查询所有机构信息
+     *
+     * @param
+     * @return
+     * @author brian.zhang
+     * @date 8/29/2017 16:47
+     */
+    @RequestMapping(value = "/getOrganizations")
+    @ResponseBody
+    public Msg getOrganizations() {
+        List<Organization> organizationList = organizationService.listAllOrganizations();
+        return Msg.success().add("organizationPage", organizationList);
     }
 }

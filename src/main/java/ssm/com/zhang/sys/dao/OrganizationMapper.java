@@ -34,15 +34,15 @@ public interface OrganizationMapper {
      * @author brian.zhang
      * @date 8/25/2017 10:52
      */
-    @Select("SELECT a.id,\n" +
-            "       a.name,\n" +
-            "       a.sequence,\n" +
-            "       a.icon,\n" +
-            "       a.type,\n" +
-            "       a.address,\n" +
-            "       a.pid,\n" +
-            "       a.status\n" +
-            "FROM sys_organization a\n" +
+    @Select("SELECT a.id," +
+            "       a.name," +
+            "       a.sequence," +
+            "       a.icon," +
+            "       a.type," +
+            "       a.address," +
+            "       a.pid," +
+            "       a.status " +
+            "FROM sys_organization a " +
             "WHERE a.del_flag = '0'")
-    List<Organization> listAllOrganization();
+    List<Organization> listAllOrganizations();
 }
