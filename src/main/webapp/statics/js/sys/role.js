@@ -11,12 +11,12 @@ $(function () {
 // 加载页面
 function loadPage(page) {
     $.ajax({
-        url: "/user/getUsers",
+        url: "/role/getRoles",
         data: "page=" + page,
         type: "GET",
         success: function (result) {
-            // 加载用户信息
-            build_user(result);
+            // 加载角色信息
+            build_role(result);
             // 加载条数信息
             build_page_info(result);
             // 加载分页信息
@@ -25,45 +25,40 @@ function loadPage(page) {
     })
 };
 
-// 加载用户信息
-function build_user(result) {
-    $("#userTable tbody").empty();
-    var users = result.extend.userPage.list;
-    $.each(users, function (index, item) {
-        var loginName = $("<td></td>").append(item.loginName);
-        var realName = $("<td></td>").append(item.realName);
-        var gender = $("<td></td>").append(item.gender == 0 ? '男' : '女');
-        var email = $("<td></td>").append(item.email);
-        var phone = $("<td></td>").append(item.phone);
-        var type = $("<td></td>").append(item.type == 0 ? '管理员' : '普通用户');
-        var status = $("<td></td>").append(item.status == 0 ? '启用' : '停用');
-        var orgId = $("<td></td>").append(item.orgId);
+// 加载角色信息
+function build_role(result) {
+    $("#roleTable tbody").empty();
+    var roles = result.extend.roleList.list;
+    $.each(roles, function (index, item) {
+        var name = $("<td></td>").append(item.name);
+        var sequence = $("<td></td>").append(item.sequence);
         var description = $("<td></td>").append(item.description);
-        var editUserBtn = $("<button></button>").addClass("btn btn-primary btn-xs editUser-btn")
+        var status = $("<td></td>").append(item.status == 0 ? '启用' : '停用');
+        var editRoleBtn = $("<button></button>").addClass("btn btn-primary btn-xs editRole-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-pencil"))
             .append("编辑");
-        editUserBtn.attr("editUser-id", item.id);
-        var deleteUserBtn = $("<button></button>").addClass("btn btn btn-danger btn-xs deleteUser-btn")
+        editRoleBtn.attr("editRole-id", item.id);
+        var deleteRoleBtn = $("<button></button>").addClass("btn btn btn-danger btn-xs deleteRole-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-trash"))
             .append("删除");
-        deleteUserBtn.attr("deleteUser-id", item.id);
-        var grantRoleBtn = $("<button></button>").addClass("btn btn-info btn-xs grantRole-btn")
+        deleteRoleBtn.attr("deleteRole-id", item.id);
+        var grantResourceBtn = $("<button></button>").addClass("btn btn-info btn-xs grantResource-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-tags"))
-            .append("授予角色");
-        grantRoleBtn.attr('grantRole-id', item.id);
-        var btn = $("<td></td>").append(editUserBtn).append("&nbsp;").append(deleteUserBtn).append("&nbsp;").append(grantRoleBtn);
-        $("<tr></tr>").append(loginName).append(realName).append(gender).append(email).append(phone).append(type).append(status).append(description).append(btn)
-            .appendTo("#userTable tbody");
+            .append("分配资源");
+        grantResourceBtn.attr('grantResource-id', item.id);
+        var btn = $("<td></td>").append(editRoleBtn).append("&nbsp;").append(deleteRoleBtn).append("&nbsp;").append(grantResourceBtn);
+        $("<tr></tr>").append(name).append(sequence).append(description).append(status).append(btn)
+            .appendTo("#roleTable tbody");
     })
 }
 
 // 加载条数信息
 function build_page_info(result) {
     $("#page_info_area").empty();
-    $("#page_info_area").append("当前" + result.extend.userPage.pageNum + "页,")
-        .append("总共" + result.extend.userPage.pages + "页，")
-        .append("总" + result.extend.userPage.total + "条记录");
-    totalRecord = result.extend.userPage.total;
+    $("#page_info_area").append("当前" + result.extend.roleList.pageNum + "页,")
+        .append("总共" + result.extend.roleList.pages + "页，")
+        .append("总" + result.extend.roleList.total + "条记录");
+    totalRecord = result.extend.roleList.total;
 }
 
 // 加载分页信息
@@ -73,7 +68,7 @@ function build_page_nav(result) {
     //首页+上一页
     var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
     var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;"));
-    if (result.extend.userPage.hasPrevisousPage == false) {
+    if (result.extend.roleList.hasPrevisousPage == false) {
         firstPageLi.addClass("disabled");
         prePageLi.addClass("disabled");
     } else {
@@ -81,28 +76,28 @@ function build_page_nav(result) {
             loadPage(1);
         });
         prePageLi.click(function () {
-            loadPage(result.extend.userPage.pageNum - 1);
+            loadPage(result.extend.roleList.pageNum - 1);
         });
     }
     //下一页+末页
     var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
     var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
-    if (result.extend.userPage.hasNextPage == false) {
+    if (result.extend.roleList.hasNextPage == false) {
         nextPageLi.addClass("disabled");
         lastPageLi.addClass("disabled");
     } else {
         nextPageLi.click(function () {
-            loadPage(result.extend.userPage.pageNum + 1);
+            loadPage(result.extend.roleList.pageNum + 1);
         });
         lastPageLi.click(function () {
-            loadPage(result.extend.userPage.pages);
+            loadPage(result.extend.roleList.pages);
         });
     }
     ul.append(firstPageLi).append(prePageLi);
 
-    $.each(result.extend.userPage.navigatepageNums, function (index, item) {
+    $.each(result.extend.roleList.navigatepageNums, function (index, item) {
         var numLi = $("<li></li>").append($("<a></a>").append(item));
-        if (result.extend.userPage.pageNum == item) {
+        if (result.extend.roleList.pageNum == item) {
             numLi.addClass("active");
         }
         numLi.click(function () {
@@ -122,15 +117,15 @@ function build_page_nav(result) {
 //     $(element).find(".help-block").text("");
 // }
 
-// 弹出新增用户界面
-$("#user_add_btn").click(function () {
-    $('#userModal form')[0].reset();
+// 弹出新增角色界面
+$("#role_add_btn").click(function () {
+    $('#roleModal form')[0].reset();
     // getOrganizaitons();
-    $('#userModal').modal({
+    $('#roleModal').modal({
         backdrop: 'static'
     });
-    $('#userLabel').html('添加用户');
-    $('#user_save_btn').text('保存');
+    $('#roleLabel').html('添加角色');
+    $('#role_save_btn').text('保存');
 })
 
 // 获取机构信息
@@ -216,66 +211,92 @@ $("#user_add_btn").click(function () {
 //     })
 // })
 // 保存用户信息
-$('#user_save_btn').click(function () {
+$('#role_save_btn').click(function () {
     var url;
-    if (!validate_add_form()) {
-        return false;
-    }
-    ;
+    // if (!validate_add_form()) {
+    //     return false;
+    // }
+    // ;
     if ($(this).attr("ajax-va") == 'error') {
         return false;
     }
     if ($(this).text() == '保存') {
-        url = '${ctx}/user/addUser';
+        url = 'role/addRole';
     } else {
-        var id = $('#user_save_btn').attr('edit_id');
-        url = 'user/editUser/' + id;
+        var id = $('#role_save_btn').attr('editRole-id');
+        url = 'role/editRole/' + id;
     }
     $.ajax({
         url: url,
         type: 'POST',
-        data: $('#userModal form').serialize(),
+        data: $('#roleModal form').serialize(),
         success: function (result) {
-            if (result.extend.code == 100) {
-                $('#userModal').modal('hide');
+            if (result.code == 100) {
+                $('#roleModal').modal('hide');
                 loadPage(totalRecord);
             } else {
-                if (undefined != result.extend.fieldErrors.email) {
-                    show_validata_msg('#email', 'error', result.extend.fieldErrors.email);
-                }
-                if (undefined != result.extend.fieldErrors.loginName) {
-                    show_validata_msg('#email', 'error', result.extend.fieldErrors.loginName);
-                }
+                // if (undefined != result.extend.fieldErrors.email) {
+                //     show_validata_msg('#email', 'error', result.extend.fieldErrors.email);
+                // }
+                // if (undefined != result.extend.fieldErrors.loginName) {
+                //     show_validata_msg('#email', 'error', result.extend.fieldErrors.loginName);
+                // }
             }
 
         }
 
     })
 });
-// 弹出修改用户界面
-$(document).on('click', '.editUser-btn', function () {
+// 弹出修改角色界面
+$(document).on('click', '.editRole-btn', function () {
     // getCompanys();
-    getUser($(this).attr("edit-id"));// 根据用户ID查询用户信息
-    $('#userModal').modal({
+    getRole($(this).attr("editRole-id"));// 根据用户ID查询用户信息
+    $('#roleModal').modal({
         backdrop: 'static'
     });
-    $('#userLabel').html('修改用户');
-    $('#user_save_btn').text('更新');
-    $('#user_save_btn').attr('edit_id', $(this).attr('edit-id'));
+    $('#roleLabel').html('修改角色');
+    $('#role_save_btn').text('更新');
+    $('#role_save_btn').attr('editRole-id', $(this).attr('editRole-id'));
 });
-// 根据用户ID查询用户信息
-function getUser(id) {
+
+// 根据角色ID查询角色信息
+function getRole(id) {
     $.ajax({
-        url: '${ctx}/user/getUserById/' + id,
+        url: 'role/getRoleById/' + id,
         type: 'GET',
         success: function (result) {
-            var userElement = result.extend.user;
-            $('#loginName').val(userElement.loginName);
-            $('#realName').val(userElement.realName);
-            $('#email').val(userElement.email);
-            $('#userModal input[name=sex]').val([userElement.sex]);
-            $('#userModal select[name=company]').val([userElement.company.id]);
-//                    $('#userModal select[name=department]').val([userElement.department.id]);
+            var roleElement = result.extend.role;
+            $('#name').val(roleElement.name);
+            $('#sequence').val(roleElement.sequence);
+            $('#description').val(roleElement.description);
+            $('#status').val(roleElement.status);
         }
     })
-}
+};
+
+// 弹出删除角色界面
+$(document).on('click', '.deleteRole-btn', function () {
+    $('#delcfmModel').modal({
+        backdrop: 'static'
+    });
+    $('#role_delete_btn').attr('deleteRole-id', $(this).attr('deleteRole-id'));
+});
+$("#role_delete_btn").click(function () {
+    var id = $('#role_delete_btn').attr('deleteRole-id');
+    deleteRoleById(id);
+});
+// 根据id删除角色信息
+function deleteRoleById(id) {
+    $.ajax({
+        url: 'role/deleteRoleById/' + id,
+        type: 'POST',
+        success: function (result) {
+            if (result.extend.count != 0) {
+                $('#delcfmModel').modal('hide');
+                loadPage(1);
+            } else {
+
+            }
+        }
+    })
+};

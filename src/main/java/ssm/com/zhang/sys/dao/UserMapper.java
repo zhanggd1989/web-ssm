@@ -22,13 +22,8 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     /**
-      * 获取所有User对象
-      *
-      * @author brian.zhang
-      * @param
-      * @return java.util.List<ssm.com.zhang.sys.domain.User>
-      * @date 8/23/2017 14:09
-      */
+     * 获取所有User对象
+     */
     @Select("SELECT a.id,\n" +
             "       a.login_name AS loginName,\n" +
             "       a.password,\n" +
@@ -39,6 +34,7 @@ public interface UserMapper {
             "       a.type,\n" +
             "       a.description,\n" +
             "       a.status,\n" +
+            "       c.id AS orgId,\n" +
             "       a.del_flag\n" +
             "FROM sys_user a\n" +
             "  LEFT JOIN sys_user_org b ON a.id = b.user_id\n" +

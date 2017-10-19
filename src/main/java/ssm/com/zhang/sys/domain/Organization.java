@@ -3,6 +3,7 @@ package ssm.com.zhang.sys.domain;
 import java.util.Date;
 
 public class Organization {
+
     private Integer id;
 
     private String name;
@@ -28,8 +29,6 @@ public class Organization {
     private String updateUserId;
 
     private Date updateDate;
-
-    private Organization children;
 
     public Integer getId() {
         return id;
@@ -135,11 +134,4 @@ public class Organization {
         this.updateDate = updateDate;
     }
 
-    public Organization getChildren() {
-        return children;
-    }
-
-    public void setChildren(Organization children) {
-        this.children = children;
-    }
 }

@@ -1,19 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+
 <html>
 <head>
-    <title>机构信息</title>
+    <title>角色信息</title>
     <jsp:include page="../inc.jsp"></jsp:include>
-    <script src="${ctx}/statics/js/sys/organization.js"></script>
+    <script src="${ctx}/statics/js/sys/role.js"></script>
 </head>
-<body class="default">
-<!-- 机构新增/修改界面 -->
-<div class="modal fade" id="organizationModal" tabindex="-1" role="dialog" aria-labelledby="organizationLabel">
+<body>
+<!-- 角色添加/修改界面 -->
+<div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="organizationLabel"></h4>
+                <h4 class="modal-title" id="roleLabel"></h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
@@ -29,35 +30,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">图标</label>
+                        <label class="col-sm-2 control-label">描述</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="icon" name="icon">
+                            <input type="text" class="form-control" id="description" name="description">
                         </div>
-                        <label class="col-sm-2 control-label">类型</label>
-                        <div class="col-sm-4">
-                            <select class="form-control" id="type" name="type">
-                                <option value="0">单位</option>
-                                <option value="1">部门</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">联系地址</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="address" name="address">
-                        </div>
-                        <label class="col-sm-2 control-label">上级机构</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="pid" name="pid" style="display:none" />
-                            <div id='jqxWidget'>
-                                <div style='float: left;' id="dropDownButton">
-                                    <div style="border: none;" id='jqxTree' >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="status" name="status">
@@ -70,30 +46,58 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="organization_save_btn"></button>
+                <button type="button" class="btn btn-primary" id="role_save_btn"></button>
             </div>
         </div>
     </div>
 </div>
-<!-- 机构新增/删除按钮 -->
+<!-- 角色查询界面-->
 <div class="panel panel-default">
+    <div class="panel-heading">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="inputName">名称</label>
+                <input type="text" class="form-control" id="inputName" name="inputName">
+            </div>
+            <button type="submit" class="btn btn-default">查询
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+        </form>
+    </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-2">
-                <button type="button" class="btn btn-primary btn-sm" id="organization_add_btn">新增
+                <button type="button" class="btn btn-primary btn-sm" id="role_add_btn">新增
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <div id="treeGrid">
-                </div>
+            <div class="col-md-10">
+                <table class="table table-hover table-bordered" id="roleTable">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>排序</th>
+                        <th>状态</th>
+                        <th>描述</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-6" id="page_info_area"></div>
+            <div class="col-md-6" id="page_nav_area"></div>
+        </div>
+    </div>
 </div>
-<!-- 信息删除确认界面 -->
+<!-- 角色删除确认界面 -->
 <div class="modal fade" id="delcfmModel">
     <div class="modal-dialog">
         <div class="modal-content message_align">
@@ -107,11 +111,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="organization_delete_btn">确定</button>
+                <button type="button" class="btn btn-primary" id="role_delete_btn">确定</button>
             </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

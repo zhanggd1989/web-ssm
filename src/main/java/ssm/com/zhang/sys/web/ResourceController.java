@@ -7,26 +7,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ssm.com.zhang.sys.domain.Msg;
-import ssm.com.zhang.sys.domain.Organization;
-import ssm.com.zhang.sys.service.OrganizationService;
+import ssm.com.zhang.sys.domain.Resource;
+import ssm.com.zhang.sys.service.ResourceService;
 
 import java.util.List;
 
 /**
- * 机构管理
+ * 资源管理
  *
  * @author brian.zhang
  * @date 8/24/2017 14:29
  */
-@RequestMapping("/organization")
+@RequestMapping("/resource")
 @Controller
-public class OrganizationController {
+public class ResourceController {
 
     @Autowired
-    OrganizationService organizationService;
+    ResourceService resourceService;
 
     /**
-     * 机构主界面
+     * 资源主界面
      *
      * @param
      * @return java.lang.String
@@ -35,82 +35,82 @@ public class OrganizationController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list() {
-        return "sys/organization";
+        return "sys/resource";
     }
 
     /**
-     * 查询所有机构信息
+     * 查询所有资源信息
      *
      * @param []
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
      * @date 10/11/2017 16:32
      */
-    @RequestMapping(value = "/getOrganizations")
+    @RequestMapping(value = "/getResources")
     @ResponseBody
-    public Msg getOrganizations() {
-        List<Organization> organizationList = organizationService.selectAllOrganizations();
-        return Msg.success().add("organizationList", organizationList);
+    public Msg getResources() {
+        List<Resource> resourceList = resourceService.selectAllResources();
+        return Msg.success().add("resourceList", resourceList);
     }
 
     /**
-     * 根据id查询机构信息
+     * 根据id查询资源信息
      *
      * @param [id]
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
      * @date 10/11/2017 16:30
      */
-    @RequestMapping(value = "getOrganizationById/{id}")
+    @RequestMapping(value = "getResourceById/{id}")
     @ResponseBody
-    public Msg getOrganizationById(@PathVariable Integer id) {
-        Organization organization = organizationService.getOrganizationById(id);
-        return Msg.success().add("organization", organization);
+    public Msg getResourceById(@PathVariable Integer id) {
+        Resource resource = resourceService.getResourceById(id);
+        return Msg.success().add("resource", resource);
     }
 
     /**
-     * 新增机构信息
+     * 新增资源信息
      *
-     * @param [organization]
+     * @param [resource]
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
      * @date 10/11/2017 16:28
      */
-    @RequestMapping(value = "addOrganization")
+    @RequestMapping(value = "addResource")
     @ResponseBody
-    public Msg addOrganization(Organization organization) {
-        int rt = organizationService.addOrganization(organization);
+    public Msg addResource(Resource resource) {
+        int rt = resourceService.addResource(resource);
         return Msg.success().add("count", rt);
     }
 
     /**
-     * 根据id更新机构信息
+     * 根据id更新资源信息
      *
-     * @param [id, organization]
+     * @param [id, resource]
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
      * @date 10/11/2017 15:00
      */
-    @RequestMapping(value = "editOrganization/{id}")
+    @RequestMapping(value = "editResource/{id}")
     @ResponseBody
-    public Msg editOrganizationById(@PathVariable Integer id, Organization organization) {
-        organization.setId(id);
-        int rt = organizationService.editOrganizationById(organization);
+    public Msg editResourceById(@PathVariable Integer id, Resource resource) {
+        resource.setId(id);
+        int rt = resourceService.editResourceById(resource);
         return Msg.success().add("count", rt);
     }
 
     /**
-     * 根据id删除机构信息
+     * 根据id删除资源信息
      *
      * @param [id]
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
      * @date 10/11/2017 16:12
      */
-    @RequestMapping(value = "deleteOrganizationById/{id}")
+    @RequestMapping(value = "deleteResourceById/{id}")
     @ResponseBody
-    public Msg deleteOrganizationById(@PathVariable Integer id) {
-        int rt = organizationService.deleteOrganizationById(id);
+    public Msg deleteResourceById(@PathVariable Integer id) {
+        int rt = resourceService.deleteResourceById(id);
         return Msg.success().add("count", rt);
     }
 }

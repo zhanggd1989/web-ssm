@@ -14,25 +14,9 @@ import java.util.List;
  */
 @Repository
 public interface OrganizationMapper {
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(Organization record);
-
-    int insertSelective(Organization record);
-
-    Organization selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(Organization record);
-
-    int updateByPrimaryKey(Organization record);
 
     /**
-     * 获取所有Organization对象
-     *
-     * @param
-     * @return java.util.List<ssm.com.zhang.sys.domain.Organization>
-     * @author brian.zhang
-     * @date 8/25/2017 10:52
+     * 查询所有Organization对象
      */
     @Select("SELECT a.id," +
             "       a.name," +
@@ -44,5 +28,35 @@ public interface OrganizationMapper {
             "       a.status " +
             "FROM sys_organization a " +
             "WHERE a.del_flag = '0'")
-    List<Organization> listAllOrganizations();
+    List<Organization> selectAllOrganizations();
+
+    /**
+     * 根据id查询Organization对象
+     */
+    Organization selectByPrimaryKey(Integer id);
+
+    /**
+     * 插入Organization对象
+     */
+    int insert(Organization record);
+
+    /**
+     * 选择性插入Organization对象
+     */
+    int insertSelective(Organization record);
+
+    /**
+     * 根据id更新Organization对象
+     */
+    int updateByPrimaryKey(Organization record);
+
+    /**
+     * 选择性根据id更新Organization对象
+     */
+    int updateByPrimaryKeySelective(Organization record);
+
+    /**
+     * 根据id删除Organization对象
+     */
+    int deleteByPrimaryKey(Integer id);
 }

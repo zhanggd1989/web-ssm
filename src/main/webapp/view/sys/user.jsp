@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 
 <html>
 <head>
@@ -72,12 +72,21 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label">所属机构</label>
+                        <input type="text" class="form-control" id="orgId" name="orgId" style="display:none"/>
+                        <div id='jqxWidget'>
+                            <div style='float: left;' id="dropDownButton">
+                                <div style="border: none;" id='jqxTree'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-2 control-label">描述</label>
                         <div class="col-sm-10">
                             <textarea class="form-control" rows="3" id="description" name="description"></textarea>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
@@ -95,14 +104,14 @@
                 <label for="inputRealName">姓名</label>
                 <input type="text" class="form-control" id="inputRealName" name="inputRealName">
             </div>
-            <button type="submit" class="btn btn-default">查询
+            <button type="button" class="btn btn-default btn-sm" id="user_query_btn">查询
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </button>
         </form>
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-2 col-md-offset-2">
+            <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-sm" id="user_add_btn">新增
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
@@ -112,10 +121,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-2" id="organizationTree">
-
-            </div>
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <table class="table table-hover table-bordered" id="userTable">
                     <thead>
                     <tr>
@@ -126,6 +132,7 @@
                         <th>电话</th>
                         <th>类型</th>
                         <th>状态</th>
+                        <th>所属机构</th>
                         <th>描述</th>
                         <th>操作</th>
                     </tr>
