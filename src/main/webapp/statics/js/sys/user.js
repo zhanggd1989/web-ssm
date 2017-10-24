@@ -37,7 +37,7 @@ function build_user(result) {
         var phone = $("<td></td>").append(item.phone);
         var type = $("<td></td>").append(item.type == 0 ? '管理员' : '普通用户');
         var status = $("<td></td>").append(item.status == 0 ? '启用' : '停用');
-        var orgId = $("<td></td>").append(item.orgId);
+        var orgName = $("<td></td>").append(item.orgName);
         var description = $("<td></td>").append(item.description);
         var editUserBtn = $("<button></button>").addClass("btn btn-primary btn-xs editUser-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-pencil"))
@@ -52,7 +52,7 @@ function build_user(result) {
             .append("授予角色");
         grantRoleBtn.attr('grantRole-id', item.id);
         var btn = $("<td></td>").append(editUserBtn).append("&nbsp;").append(deleteUserBtn).append("&nbsp;").append(grantRoleBtn);
-        $("<tr></tr>").append(loginName).append(realName).append(gender).append(email).append(phone).append(type).append(status).append(description).append(btn)
+        $("<tr></tr>").append(loginName).append(realName).append(gender).append(email).append(phone).append(type).append(status).append(orgName).append(description).append(btn)
             .appendTo("#userTable tbody");
     })
 }
@@ -125,50 +125,14 @@ function build_page_nav(result) {
 // 弹出新增用户界面
 $("#user_add_btn").click(function () {
     $('#userModal form')[0].reset();
-    // getOrganizaitons();
+    $("#dropDownButton").jqxDropDownButton('setContent', '');
     $('#userModal').modal({
         backdrop: 'static'
     });
+    loadOrg();
     $('#userLabel').html('添加用户');
     $('#user_save_btn').text('保存');
-})
-
-// 获取机构信息
-// function getOrganizaitons() {
-//     $('#company').empty();
-//     $.ajax({
-//         url: "/organization/organizationTree",
-//         type: "GET",
-//         success: function (result) {
-//             $.each(result, function (i, n) {
-//                 var optionEle = $('<option></option>').append(n.text).attr("value", n.id).attr("children", n.children);
-//                 optionEle.appendTo('#company');
-//             })
-//             $('#company').select2();
-//         }
-//     })
-// }
-
-// 获取部门信息
-// $('#department').click(function () {
-//     var companyId = $('#company').val();
-//     $.ajax({
-//         url: "",
-//         type: "GET",
-//         success: function (result) {
-//             $('#department').select2({
-//                 width: '170px',
-//                 data: [{
-//                     id: '1',
-//                     text: '行政部'
-//                 }, {
-//                     id: '2',
-//                     text: '财务部'
-//                 }]
-//             })
-//         }
-//     })
-// })
+});
 
 // 校验
 // function validate_add_form() {
@@ -199,6 +163,7 @@ $("#user_add_btn").click(function () {
 //     }
 //     $(element).next("span").text(msg);
 // };
+
 // $('#loginName').change(function () {
 //     $.ajax({
 //         url: '/user/checkUser',
@@ -214,51 +179,15 @@ $("#user_add_btn").click(function () {
 //             }
 //         }
 //     })
-// })
-// 保存用户信息
-$('#user_save_btn').click(function () {
-    var url;
-    if (!validate_add_form()) {
-        return false;
-    }
-    ;
-    if ($(this).attr("ajax-va") == 'error') {
-        return false;
-    }
-    if ($(this).text() == '保存') {
-        url = '${ctx}/user/addUser';
-    } else {
-        var id = $('#user_save_btn').attr('edit_id');
-        url = 'user/editUser/' + id;
-    }
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: $('#userModal form').serialize(),
-        success: function (result) {
-            if (result.extend.code == 100) {
-                $('#userModal').modal('hide');
-                loadPage(totalRecord);
-            } else {
-                if (undefined != result.extend.fieldErrors.email) {
-                    show_validata_msg('#email', 'error', result.extend.fieldErrors.email);
-                }
-                if (undefined != result.extend.fieldErrors.loginName) {
-                    show_validata_msg('#email', 'error', result.extend.fieldErrors.loginName);
-                }
-            }
+// });
 
-        }
-
-    })
-});
 // 弹出修改用户界面
 $(document).on('click', '.editUser-btn', function () {
-    // getCompanys();
-    getUser($(this).attr("edit-id"));// 根据用户ID查询用户信息
     $('#userModal').modal({
         backdrop: 'static'
     });
+    loadOrg();
+    getUser($(this).attr("editUser-id"));// 根据用户ID查询用户信息
     $('#userLabel').html('修改用户');
     $('#user_save_btn').text('更新');
     $('#user_save_btn').attr('edit_id', $(this).attr('edit-id'));
@@ -266,16 +195,118 @@ $(document).on('click', '.editUser-btn', function () {
 // 根据用户ID查询用户信息
 function getUser(id) {
     $.ajax({
-        url: '${ctx}/user/getUserById/' + id,
+        url: 'user/getUserById/' + id,
         type: 'GET',
         success: function (result) {
             var userElement = result.extend.user;
             $('#loginName').val(userElement.loginName);
+            $('#password').val(userElement.password);
             $('#realName').val(userElement.realName);
+            $('#sex').val(userElement.sex);
             $('#email').val(userElement.email);
-            $('#userModal input[name=sex]').val([userElement.sex]);
-            $('#userModal select[name=company]').val([userElement.company.id]);
-//                    $('#userModal select[name=department]').val([userElement.department.id]);
+            $('#phone').val(userElement.phone);
+            $('#type').val(userElement.type);
+            $('#status').val(userElement.status);
+            $("#dropDownButton").jqxDropDownButton('setContent', '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + userElement.orgName + '</div>');
+            $('#description').val(userElement.description);
         }
     })
-}
+};
+// 保存用户信息
+$('#user_save_btn').click(function () {
+    var url;
+    // if (!validate_add_form()) {
+    //     return false;
+    // };
+    // if ($(this).attr("ajax-va") == 'error') {
+    //     return false;
+    // };
+    if ($(this).text() == '保存') {
+        url = 'user/addUser';
+    } else {
+        var id = $('#user_save_btn').attr('editUser-id');
+        url = 'user/editUser/' + id;
+    };
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: $('#userModal form').serialize(),
+        success: function (result) {
+            if (result.code == 100) {
+                $('#userModal').modal('hide');
+                loadPage(totalRecord);
+            } else {
+                // if (undefined != result.extend.fieldErrors.email) {
+                //     show_validata_msg('#email', 'error', result.extend.fieldErrors.email);
+                // };
+                // if (undefined != result.extend.fieldErrors.loginName) {
+                //     show_validata_msg('#email', 'error', result.extend.fieldErrors.loginName);
+                // };
+            }
+        }
+    });
+});
+function loadOrg() {
+    $.ajax({
+        url: '/organization/getOrganizations',
+        type: 'GET',
+        success: function (result) {
+            var data = result.extend.organizationList;// 加载机构信息
+            var source =
+                {
+                    datatype: "json",
+                    datafields: [
+                        {name: 'id'},
+                        {name: 'pid'},
+                        {name: 'name'}
+                    ],
+                    id: 'id',
+                    localdata: data
+                };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            dataAdapter.dataBind();
+            var records = dataAdapter.getRecordsHierarchy('id', 'pid', 'items', [{name: 'name', map: 'label'}]);
+            // Create jqxDropDownButton
+            $("#dropDownButton").jqxDropDownButton({width: 170, height: 28, theme: 'bootstrap'});
+            $('#jqxTree').on('select', function (event) {
+                var args = event.args;
+                var item = $('#jqxTree').jqxTree('getItem', args.element);
+                var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
+                $("#dropDownButton").jqxDropDownButton('setContent', dropDownContent);
+                $('#dropDownButton').jqxDropDownButton('close');
+                $('#orgId').val(item.id);
+            });
+            $("#jqxTree").jqxTree({
+                source: records,
+                width: 170,
+                theme: 'bootstrap',
+            });
+        }
+    });
+};
+// 弹出删除用户界面
+$(document).on('click', '.deleteUser-btn', function () {
+    $('#delcfmModel').modal({
+        backdrop: 'static'
+    });
+    $('#user_delete_btn').attr('deleteUser-id', $(this).attr('deleteUser-id'));
+});
+$("#user_delete_btn").click(function () {
+    var id = $('#user_delete_btn').attr('deleteUser-id');
+    deleteUserById(id);
+});
+// 根据id删除用户信息
+function deleteUserById(id) {
+    $.ajax({
+        url: 'user/deleteUserById/' + id,
+        type: 'POST',
+        success: function (result) {
+            if (result.extend.count != 0) {
+                $('#delcfmModel').modal('hide');
+                loadPage(1);
+            } else {
+
+            }
+        }
+    })
+};

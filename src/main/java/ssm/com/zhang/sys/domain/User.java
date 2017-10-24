@@ -34,6 +34,10 @@ public class User {
 
     private Date updateDate;
 
+    private Integer orgId;
+
+    private String orgName;
+
     public Integer getId() {
         return id;
     }
@@ -152,5 +156,21 @@ public class User {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Integer getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Integer orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }

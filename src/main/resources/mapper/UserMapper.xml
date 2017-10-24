@@ -32,7 +32,7 @@
     delete from sys_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="ssm.com.zhang.sys.domain.User" >
+  <insert id="insert" parameterType="ssm.com.zhang.sys.domain.User" useGeneratedKeys="true" keyProperty="id">
     insert into sys_user (id, login_name, password, 
       real_name, gender, email, 
       phone, type, description, 
@@ -46,7 +46,7 @@
       #{createDate,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="ssm.com.zhang.sys.domain.User" >
+  <insert id="insertSelective" parameterType="ssm.com.zhang.sys.domain.User" useGeneratedKeys="true" keyProperty="id">
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

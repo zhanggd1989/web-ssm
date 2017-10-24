@@ -50,7 +50,6 @@ public interface RoleMapper {
     /**
      * 选择性根据id更新Role对象
      */
-
     int updateByPrimaryKeySelective(Role record);
 
     /**

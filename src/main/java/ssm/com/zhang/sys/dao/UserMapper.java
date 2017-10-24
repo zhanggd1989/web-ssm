@@ -6,20 +6,14 @@ import ssm.com.zhang.sys.domain.User;
 
 import java.util.List;
 
+/**
+ * 用户管理
+ *
+ * @author brian.zhang
+ * @date 10/20/2017 10:14
+ */
 @Repository
 public interface UserMapper {
-
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(User record);
-
-    int insertSelective(User record);
-
-    User selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(User record);
-
-    int updateByPrimaryKey(User record);
 
     /**
      * 获取所有User对象
@@ -35,6 +29,7 @@ public interface UserMapper {
             "       a.description,\n" +
             "       a.status,\n" +
             "       c.id AS orgId,\n" +
+            "       c.name AS orgName,\n" +
             "       a.del_flag\n" +
             "FROM sys_user a\n" +
             "  LEFT JOIN sys_user_org b ON a.id = b.user_id\n" +
@@ -42,4 +37,35 @@ public interface UserMapper {
             "  LEFT JOIN sys_organization d ON c.pid = d.id AND d.del_flag = '0'\n" +
             "WHERE a.del_flag = '0'")
     List<User> listAllUsers();
+
+    /**
+     * 根据id查询User对象
+     */
+    User selectByPrimaryKey(Integer id);
+
+    /**
+     * 插入User对象
+     */
+    int insert(User record);
+
+    /**
+     * 选择性插入User对象
+     */
+    int insertSelective(User record);
+
+    /**
+     * 根据id更新User对象
+     */
+    int updateByPrimaryKey(User record);
+
+    /**
+     * 选择性根据id更新User对象
+     */
+    int updateByPrimaryKeySelective(User record);
+
+    /**
+     * 根据id删除User对象
+     */
+    int deleteByPrimaryKey(Integer id);
+
 }

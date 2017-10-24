@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">所属机构</label>
                         <input type="text" class="form-control" id="orgId" name="orgId" style="display:none"/>
-                        <div id='jqxWidget'>
+                        <div class="col-sm-4" id='jqxWidget'>
                             <div style='float: left;' id="dropDownButton">
                                 <div style="border: none;" id='jqxTree'>
                                 </div>
@@ -114,9 +114,6 @@
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary btn-sm" id="user_add_btn">新增
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm" id="user_delete_btn">删除
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
