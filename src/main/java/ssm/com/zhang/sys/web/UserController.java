@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ssm.com.zhang.sys.domain.Msg;
 import ssm.com.zhang.sys.domain.User;
+import ssm.com.zhang.sys.domain.UserRole;
 import ssm.com.zhang.sys.service.UserService;
 
 import java.util.List;
@@ -25,26 +26,26 @@ public class UserController {
     UserService userService;
 
     /**
-      * 用户主界面
-      *
-      * @author brian.zhang
-      * @param
-      * @return java.lang.String
-      * @date 8/23/2017 11:22
-      */
+     * 用户主界面
+     *
+     * @param
+     * @return java.lang.String
+     * @author brian.zhang
+     * @date 8/23/2017 11:22
+     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list() {
         return "sys/user";
     }
 
     /**
-      * 查询所有用户信息
-      *
-      * @author brian.zhang
-      * @param page
-      * @return ssm.com.zhang.sys.domain.Msg
-      * @date 8/23/2017 11:22
-      */
+     * 查询所有用户信息
+     *
+     * @param page
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 8/23/2017 11:22
+     */
     @RequestMapping(value = "/getUsers", method = RequestMethod.GET)
     @ResponseBody
     public Msg getUsers(@RequestParam(value = "page") Integer page) {
@@ -117,5 +118,35 @@ public class UserController {
     public Msg deleteUserById(@PathVariable Integer id) {
         int rt = userService.deleteUserById(id);
         return Msg.success().add("count", rt);
+    }
+
+    /**
+     * 根据id新增用户-角色关系信息
+     *
+     * @param [userId, roleIds]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/6/2017 11:09
+     */
+    @RequestMapping(value = "addUserAndRoleByUserId/{userId}")
+    @ResponseBody
+    public Msg addUserAndRoleByUserId(@PathVariable Integer userId, @RequestParam(value = "roleIds") String roleIds) {
+        int rt = userService.addUserAndRoleByUserId(userId, roleIds);
+        return Msg.success().add("count", rt);
+    }
+
+    /**
+     * 根据id查询用户的角色信息
+     *
+     * @param [userId]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/7/2017 14:04
+     */
+    @RequestMapping(value = "getRolesByUserId/{userId}")
+    @ResponseBody
+    public Msg getRolesByUserId(@PathVariable Integer userId) {
+        List<UserRole> userRoles = userService.getRolesByUserId(userId);
+        return Msg.success().add("userRoles", userRoles);
     }
 }

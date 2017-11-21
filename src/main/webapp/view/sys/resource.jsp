@@ -99,7 +99,7 @@
         </div>
     </div>
 </div>
-<!-- 信息删除确认界面 -->
+<!-- 资源删除确认界面 -->
 <div class="modal fade" id="delcfmModel">
     <div class="modal-dialog">
         <div class="modal-content message_align">
@@ -118,6 +118,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

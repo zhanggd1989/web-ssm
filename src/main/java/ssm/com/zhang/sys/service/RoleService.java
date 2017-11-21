@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ssm.com.zhang.sys.dao.RoleMapper;
 import ssm.com.zhang.sys.domain.Role;
+import ssm.com.zhang.sys.domain.RoleSource;
 
 import java.util.List;
 
@@ -80,5 +81,17 @@ public class RoleService {
      */
     public int deleteRoleById(Integer id) {
         return roleMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 根据id查询角色的资源信息
+     *
+     * @param [roleId]
+     * @return java.util.List<ssm.com.zhang.sys.domain.RoleSource>
+     * @author brian.zhang
+     * @date 11/8/2017 16:26
+     */
+    public List<RoleSource> getResourcesByRoleId(Integer roleId) {
+        return roleMapper.selectByRoleId(roleId);
     }
 }

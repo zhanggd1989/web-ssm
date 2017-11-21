@@ -1,3 +1,4 @@
+// 初始化
 $(function () {
     loadPage();// 加载页面
 });
@@ -8,15 +9,16 @@ function loadPage() {
         url: '/resource/getResources',
         type: 'GET',
         success: function (result) {
-            build_resource(result);// 加载资源信息
+            // 加载资源信息
+            build_resource(result);
         }
     })
 };
 
 // 加载资源信息
 function build_resource(result) {
+    $('#treeGrid').empty();
     var resourceList = result.extend.resourceList;
-    // prepare the data
     var source =
         {
             dataType: "json",
@@ -44,7 +46,7 @@ function build_resource(result) {
     $("#treeGrid").jqxTreeGrid(
         {
             width: '100%',
-            height: '100%',
+            height: '80%',
             source: dataAdapter,
             filterable: true,
             altRows: true,
@@ -54,7 +56,7 @@ function build_resource(result) {
                 $("#treeGrid").jqxTreeGrid('expandAll');
             },
             rendered: function () {
-                // 编辑资源
+                // 弹出编辑资源界面
                 $(".resource-edit").click(function () {
                     var selection = $("#treeGrid").jqxTreeGrid('getSelection');
                     $('#resourceModal').modal({
@@ -62,30 +64,30 @@ function build_resource(result) {
                     });
                     $('#resourceLabel').html('编辑资源');
                     $('#resource_save_btn').text('更新');
-                    $('#resource_save_btn').attr('edit_id', selection[0].id);
+                    $('#resource_save_btn').attr('editResource-id', selection[0].id);
                     getResourceById(selection[0].id);
                     loadParentResource();
                 });
-                // 删除资源
+                // 弹出删除资源界面
                 $(".resource-delete").click(function () {
                     var selection = $("#treeGrid").jqxTreeGrid('getSelection');
                     $('#delcfmModel').modal({
                         backdrop: 'static'
                     });
-                    $('#resource_delete_btn').attr('delete_id', selection[0].id);
+                    $('#resource_delete_btn').attr('deleteResource-id', selection[0].id);
                 });
             },
             columns:
                 [
-                    {text: 'id', dataField: 'id', align: 'center', hidden: true},
-                    {text: '名称', dataField: 'name', align: 'center'},
-                    {text: '链接', dataField: 'url', align: 'center'},
-                    {text: '排序', dataField: 'sequence', align: 'center'},
-                    {text: '图标', dataField: 'icon', align: 'center'},
+                    {text: 'id', dataField: 'id', align: 'left', hidden: true},
+                    {text: '名称', dataField: 'name', align: 'left'},
+                    {text: '链接', dataField: 'url', align: 'left'},
+                    {text: '排序', dataField: 'sequence', align: 'left'},
+                    {text: '图标', dataField: 'icon', align: 'left'},
                     {
                         text: '类型',
                         dataField: 'type',
-                        align: 'center',
+                        align: 'left',
                         cellsRenderer: function (row, column, value, rowData) {
                             if ('0' == value) {
                                 return '菜单'
@@ -94,11 +96,11 @@ function build_resource(result) {
                             }
                         }
                     },
-                    {text: '资源描述', dataField: 'description', align: 'center'},
+                    {text: '资源描述', dataField: 'description', align: 'left'},
                     {
                         text: '状态',
                         dataField: 'status',
-                        align: 'center',
+                        align: 'left',
                         cellsRenderer: function (row, column, value, rowData) {
                             if ('0' == value) {
                                 return '启用'
@@ -108,9 +110,9 @@ function build_resource(result) {
                         }
                     },
                     {
-                        text: '操作', align: 'center', cellsRenderer: function (row, column, value, rowData) {
-                        var editResourceBtn = "<input type='button' value='编辑' class='btn btn-primary btn-xs resource-edit'/>";
-                        var deleteResourceBtn = "<input type='button' value='删除' class='btn btn btn-danger btn-xs resource-delete'/>";
+                        text: '操作', align: 'left', cellsRenderer: function (row, column, value, rowData) {
+                        var editResourceBtn = "<button class='btn btn-primary btn-xs resource-edit'><span class='glyphicon glyphicon-pencil'></span>编辑</button>";
+                        var deleteResourceBtn = "<button class='btn btn-danger btn-xs resource-delete'><span class='glyphicon glyphicon-trash'></span>删除</button>";
                         return editResourceBtn + "&nbsp;" + deleteResourceBtn;
                     }
                     }
@@ -119,7 +121,19 @@ function build_resource(result) {
     ;
 };
 
-// 根据id查询资源信息
+// 弹出新增资源界面
+$("#resource_add_btn").click(function () {
+    $('#resourceModal form')[0].reset();
+    $("#dropDownButton").jqxDropDownButton('setContent', '');
+    $('#resourceModal').modal({
+        backdrop: 'static'
+    });
+    loadParentResource();
+    $('#resourceLabel').html('添加资源');
+    $('#resource_save_btn').text('保存');
+});
+
+// 根据资源ID查询资源信息
 function getResourceById(id) {
     $.ajax({
         url: 'resource/getResourceById/' + id,
@@ -133,7 +147,7 @@ function getResourceById(id) {
                 $('#icon').val(resourceElement.icon);
                 $('#type').val(resourceElement.type);
                 $('#description').val(resourceElement.description);
-                $('#pid').val(resourceElement.pid);
+                $("#dropDownButton").jqxDropDownButton('setContent', '<div style="position: relative; margin-left: 3px; margin-top: 5px; font-size: 14px; padding: 1px 12px; color: #555;">' + resourceElement.pName + '</div>');
                 $('#status').val(resourceElement.status);
             } else {
 
@@ -141,16 +155,17 @@ function getResourceById(id) {
         }
     })
 };
+
 // 保存资源信息
 $('#resource_save_btn').click(function () {
     var url;
-    if ($(this).text() == '保存') {
+    var btnText = $(this).text();
+    if (btnText == '保存') {
         url = 'resource/addResource';
     } else {
-        var id = $('#resource_save_btn').attr('edit_id');
+        var id = $('#resource_save_btn').attr('editResource-id');
         url = 'resource/editResource/' + id;
-    }
-    ;
+    };
     $.ajax({
         url: url,
         type: 'POST',
@@ -165,37 +180,6 @@ $('#resource_save_btn').click(function () {
             }
         }
     })
-});
-// 删除资源信息
-$('#resource_delete_btn').click(function () {
-    var id = $('#resource_delete_btn').attr('delete_id');
-    deleteResourceById(id);
-});
-
-// 根据id删除资源信息
-function deleteResourceById(id) {
-    $.ajax({
-        url: 'resource/deleteResourceById/' + id,
-        type: 'POST',
-        success: function (result) {
-            if (result.extend.count != 0) {
-                $('#delcfmModel').modal('hide');
-                loadPage();
-            } else {
-
-            }
-        }
-    })
-};
-// 新增资源信息
-$("#resource_add_btn").click(function () {
-    $('#resourceModal form')[0].reset();
-    $('#resourceModal').modal({
-        backdrop: 'static'
-    });
-    $('#resourceLabel').html('添加资源');
-    $('#resource_save_btn').text('保存');
-    loadParentResource();
 });
 
 // 加载父资源信息
@@ -236,4 +220,26 @@ function loadParentResource() {
             });
         }
     });
+};
+
+// 删除资源信息
+$('#resource_delete_btn').click(function () {
+    var id = $('#resource_delete_btn').attr('deleteResource-id');
+    deleteResourceById(id);
+});
+
+// 根据id删除资源信息
+function deleteResourceById(id) {
+    $.ajax({
+        url: 'resource/deleteResourceById/' + id,
+        type: 'POST',
+        success: function (result) {
+            if (result.extend.count != 0) {
+                $('#delcfmModel').modal('hide');
+                loadPage();
+            } else {
+
+            }
+        }
+    })
 };

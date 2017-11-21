@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ssm.com.zhang.sys.domain.Msg;
 import ssm.com.zhang.sys.domain.Role;
+import ssm.com.zhang.sys.domain.RoleSource;
 import ssm.com.zhang.sys.service.RoleService;
 
 import java.util.List;
@@ -52,10 +53,10 @@ public class RoleController {
         int intPage = (page == null || page == 0) ? 1 : page;
         //每页显示条数
         int number = 10;
-        PageHelper.startPage(intPage,number);
-        List<Role> roles = roleService.selectAllRoles();
-        PageInfo roleList = new PageInfo(roles, number);
-        return Msg.success().add("roleList", roleList);
+        PageHelper.startPage(intPage, number);
+        List<Role> roleList = roleService.selectAllRoles();
+        PageInfo rolePage = new PageInfo(roleList, number);
+        return Msg.success().add("rolePage", rolePage);
     }
 
     /**
@@ -117,5 +118,20 @@ public class RoleController {
     public Msg deleteRoleById(@PathVariable Integer id) {
         int rt = roleService.deleteRoleById(id);
         return Msg.success().add("count", rt);
+    }
+
+    /**
+     * 根据id查询角色资源信息
+     *
+     * @param [roleId]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/8/2017 16:22
+     */
+    @RequestMapping(value = "getResourcesByRoleId/{roleId}")
+    @ResponseBody
+    public Msg getResourcesByRoleId(@PathVariable Integer roleId) {
+        List<RoleSource> roleResource = roleService.getResourcesByRoleId(roleId);
+        return Msg.success().add("roleResource", roleResource);
     }
 }

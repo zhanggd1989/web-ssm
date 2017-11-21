@@ -3,16 +3,14 @@ package ssm.com.zhang.sys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import ssm.com.zhang.sys.dao.OrganizationMapper;
 import ssm.com.zhang.sys.dao.UserMapper;
 import ssm.com.zhang.sys.dao.UserOrgMapper;
-import ssm.com.zhang.sys.domain.Msg;
+import ssm.com.zhang.sys.dao.UserRoleMapper;
 import ssm.com.zhang.sys.domain.Organization;
 import ssm.com.zhang.sys.domain.User;
 import ssm.com.zhang.sys.domain.UserOrg;
+import ssm.com.zhang.sys.domain.UserRole;
 
 import java.util.List;
 
@@ -34,6 +32,9 @@ public class UserService {
 
     @Autowired
     UserOrgMapper userOrgMapper;
+
+    @Autowired
+    UserRoleMapper userRoleMapper;
 
     /**
      * 查询所有用户信息
@@ -103,5 +104,38 @@ public class UserService {
      */
     public int deleteUserById(Integer id) {
         return userMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 新增用户-角色关系信息
+     *
+     * @param [userId, roleIds]
+     * @return int
+     * @author brian.zhang
+     * @date 11/6/2017 11:11
+     */
+    public int addUserAndRoleByUserId(Integer userId, String roleIds) {
+        userRoleMapper.deleteByUserId(userId);
+        String[] roles = roleIds.split(",");
+        int rt = 0;
+        for (String role : roles) {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(Integer.parseInt(role));
+            rt = userRoleMapper.insert(userRole);
+        }
+        return rt;
+    }
+
+    /**
+     * 根据id查询用户的角色信息
+     *
+     * @param [userId]
+     * @return int
+     * @author brian.zhang
+     * @date 11/7/2017 14:07
+     */
+    public List<UserRole> getRolesByUserId(Integer userId) {
+        return userRoleMapper.selectByUserId(userId);
     }
 }

@@ -5,7 +5,6 @@
     <title>用户信息</title>
     <jsp:include page="../inc.jsp"></jsp:include>
     <script src="${ctx}/statics/js/sys/user.js"></script>
-    <link rel="stylesheet" href="${ctx}/statics/css/sys/user.css">
 </head>
 <body>
 <!-- 用户添加/修改界面 -->
@@ -144,6 +143,43 @@
         <div class="row">
             <div class="col-md-6" id="page_info_area"></div>
             <div class="col-md-6" id="page_nav_area"></div>
+        </div>
+    </div>
+</div>
+<!-- 用户删除确认界面 -->
+<div class="modal fade" id="delcfmModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body">
+                <p>您确认要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="user_delete_btn">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 用户授予角色界面 -->
+<div class="modal fade" id="grantRoleModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">授予角色</h4>
+            </div>
+            <div class="modal-body" id="roleList">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="user_grantrole_btn">确定</button>
+            </div>
         </div>
     </div>
 </div>

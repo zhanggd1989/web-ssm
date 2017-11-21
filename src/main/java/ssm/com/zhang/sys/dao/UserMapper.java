@@ -35,7 +35,8 @@ public interface UserMapper {
             "  LEFT JOIN sys_user_org b ON a.id = b.user_id\n" +
             "  LEFT JOIN sys_organization c ON b.org_id = c.id AND c.del_flag = '0'\n" +
             "  LEFT JOIN sys_organization d ON c.pid = d.id AND d.del_flag = '0'\n" +
-            "WHERE a.del_flag = '0'")
+            "WHERE a.del_flag = '0'\n" +
+            "ORDER BY a.id")
     List<User> listAllUsers();
 
     /**

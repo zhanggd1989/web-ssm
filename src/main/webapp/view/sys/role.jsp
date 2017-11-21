@@ -59,7 +59,7 @@
                 <label for="inputName">名称</label>
                 <input type="text" class="form-control" id="inputName" name="inputName">
             </div>
-            <button type="submit" class="btn btn-default">查询
+            <button type="button" class="btn btn-default btn-sm" id="role_query_btn">查询
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </button>
         </form>
@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <table class="table table-hover table-bordered" id="roleTable">
                     <thead>
                     <tr>
@@ -112,6 +112,24 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" id="role_delete_btn">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 角色分配资源界面 -->
+<div class="modal fade" id="grantResourceModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">分配资源</h4>
+            </div>
+            <div id='jqxWidget'>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="role_grantresource_btn">确定</button>
             </div>
         </div>
     </div>

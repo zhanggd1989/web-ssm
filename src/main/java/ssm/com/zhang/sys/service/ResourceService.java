@@ -46,7 +46,10 @@ public class ResourceService {
      * @date 10/16/2017 14:22
      */
     public Resource getResourceById(Integer id) {
-        return resourceMapper.selectByPrimaryKey(id);
+        Resource resource = resourceMapper.selectByPrimaryKey(id);
+        Resource pResource = resourceMapper.selectByPrimaryKey(resource.getPid());
+        resource.setpName(pResource.getName());
+        return resource;
     }
 
     /**

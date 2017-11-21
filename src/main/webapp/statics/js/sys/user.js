@@ -41,21 +41,24 @@ function build_user(result) {
         var description = $("<td></td>").append(item.description);
         var editUserBtn = $("<button></button>").addClass("btn btn-primary btn-xs editUser-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-pencil"))
+            .append("&nbsp;")
             .append("编辑");
         editUserBtn.attr("editUser-id", item.id);
         var deleteUserBtn = $("<button></button>").addClass("btn btn btn-danger btn-xs deleteUser-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-trash"))
+            .append("&nbsp;")
             .append("删除");
         deleteUserBtn.attr("deleteUser-id", item.id);
         var grantRoleBtn = $("<button></button>").addClass("btn btn-info btn-xs grantRole-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-tags"))
+            .append("&nbsp;")
             .append("授予角色");
         grantRoleBtn.attr('grantRole-id', item.id);
         var btn = $("<td></td>").append(editUserBtn).append("&nbsp;").append(deleteUserBtn).append("&nbsp;").append(grantRoleBtn);
         $("<tr></tr>").append(loginName).append(realName).append(gender).append(email).append(phone).append(type).append(status).append(orgName).append(description).append(btn)
             .appendTo("#userTable tbody");
-    })
-}
+    });
+};
 
 // 加载条数信息
 function build_page_info(result) {
@@ -72,8 +75,8 @@ function build_page_nav(result) {
     var ul = $("<ul></ul>").addClass("pagination");
     //首页+上一页
     var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
-    var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;"));
-    if (result.extend.userPage.hasPrevisousPage == false) {
+    var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;").attr("href", "#"));
+    if (result.extend.userPage.hasPreviousPage == false) {
         firstPageLi.addClass("disabled");
         prePageLi.addClass("disabled");
     } else {
@@ -84,8 +87,9 @@ function build_page_nav(result) {
             loadPage(result.extend.userPage.pageNum - 1);
         });
     }
+    ;
     //下一页+末页
-    var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
+    var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;").attr("href", "#"));
     var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
     if (result.extend.userPage.hasNextPage == false) {
         nextPageLi.addClass("disabled");
@@ -98,18 +102,20 @@ function build_page_nav(result) {
             loadPage(result.extend.userPage.pages);
         });
     }
+    ;
     ul.append(firstPageLi).append(prePageLi);
 
     $.each(result.extend.userPage.navigatepageNums, function (index, item) {
-        var numLi = $("<li></li>").append($("<a></a>").append(item));
+        var numLi = $("<li></li>").append($("<a></a>").append(item).attr("href", "#"));
         if (result.extend.userPage.pageNum == item) {
             numLi.addClass("active");
         }
+        ;
         numLi.click(function () {
             loadPage(item);
-        })
+        });
         ul.append(numLi);
-    })
+    });
     ul.append(nextPageLi).append(lastPageLi);
 
     var navEle = $("<nav></nav>").append(ul);
@@ -126,6 +132,8 @@ function build_page_nav(result) {
 $("#user_add_btn").click(function () {
     $('#userModal form')[0].reset();
     $("#dropDownButton").jqxDropDownButton('setContent', '');
+    $('#loginName').attr("readOnly", false);
+    $('#password').attr("readOnly", false);
     $('#userModal').modal({
         backdrop: 'static'
     });
@@ -190,8 +198,9 @@ $(document).on('click', '.editUser-btn', function () {
     getUser($(this).attr("editUser-id"));// 根据用户ID查询用户信息
     $('#userLabel').html('修改用户');
     $('#user_save_btn').text('更新');
-    $('#user_save_btn').attr('edit_id', $(this).attr('edit-id'));
+    $('#user_save_btn').attr('editUser-id', $(this).attr('editUser-id'));
 });
+
 // 根据用户ID查询用户信息
 function getUser(id) {
     $.ajax({
@@ -199,34 +208,37 @@ function getUser(id) {
         type: 'GET',
         success: function (result) {
             var userElement = result.extend.user;
-            $('#loginName').val(userElement.loginName);
-            $('#password').val(userElement.password);
+            $('#loginName').val(userElement.loginName).attr("readOnly", true);
+            $('#password').val(userElement.password).attr("readOnly", true);
             $('#realName').val(userElement.realName);
-            $('#sex').val(userElement.sex);
+            $("input[name='gender'][value='" + userElement.gender + "']").attr("checked", true);
             $('#email').val(userElement.email);
             $('#phone').val(userElement.phone);
             $('#type').val(userElement.type);
             $('#status').val(userElement.status);
-            $("#dropDownButton").jqxDropDownButton('setContent', '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + userElement.orgName + '</div>');
+            $("#dropDownButton").jqxDropDownButton('setContent', '<div style="position: relative; margin-left: 3px; margin-top: 5px; font-size: 14px; padding: 1px 12px; color: #555;">' + userElement.orgName + '</div>');
             $('#description').val(userElement.description);
         }
     })
 };
+
 // 保存用户信息
 $('#user_save_btn').click(function () {
     var url;
+    var btnText = $(this).text();
     // if (!validate_add_form()) {
     //     return false;
     // };
     // if ($(this).attr("ajax-va") == 'error') {
     //     return false;
     // };
-    if ($(this).text() == '保存') {
+    if (btnText == '保存') {
         url = 'user/addUser';
     } else {
         var id = $('#user_save_btn').attr('editUser-id');
         url = 'user/editUser/' + id;
-    };
+    }
+    ;
     $.ajax({
         url: url,
         type: 'POST',
@@ -234,7 +246,11 @@ $('#user_save_btn').click(function () {
         success: function (result) {
             if (result.code == 100) {
                 $('#userModal').modal('hide');
-                loadPage(totalRecord);
+                if (btnText == '保存') {
+                    loadPage(totalRecord);
+                } else {
+                    loadPage($('#page_nav_area').find('li.active a').html());
+                }
             } else {
                 // if (undefined != result.extend.fieldErrors.email) {
                 //     show_validata_msg('#email', 'error', result.extend.fieldErrors.email);
@@ -246,6 +262,8 @@ $('#user_save_btn').click(function () {
         }
     });
 });
+
+// 加载机构树
 function loadOrg() {
     $.ajax({
         url: '/organization/getOrganizations',
@@ -266,12 +284,11 @@ function loadOrg() {
             var dataAdapter = new $.jqx.dataAdapter(source);
             dataAdapter.dataBind();
             var records = dataAdapter.getRecordsHierarchy('id', 'pid', 'items', [{name: 'name', map: 'label'}]);
-            // Create jqxDropDownButton
             $("#dropDownButton").jqxDropDownButton({width: 170, height: 28, theme: 'bootstrap'});
             $('#jqxTree').on('select', function (event) {
                 var args = event.args;
                 var item = $('#jqxTree').jqxTree('getItem', args.element);
-                var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px;">' + item.label + '</div>';
+                var dropDownContent = '<div style="position: relative; margin-left: 3px; margin-top: 5px; font-size: 14px; padding: 1px 12px; color: #555;">' + item.label + '</div>';
                 $("#dropDownButton").jqxDropDownButton('setContent', dropDownContent);
                 $('#dropDownButton').jqxDropDownButton('close');
                 $('#orgId').val(item.id);
@@ -291,10 +308,12 @@ $(document).on('click', '.deleteUser-btn', function () {
     });
     $('#user_delete_btn').attr('deleteUser-id', $(this).attr('deleteUser-id'));
 });
+// 删除用户信息
 $("#user_delete_btn").click(function () {
     var id = $('#user_delete_btn').attr('deleteUser-id');
     deleteUserById(id);
 });
+
 // 根据id删除用户信息
 function deleteUserById(id) {
     $.ajax({
@@ -303,6 +322,75 @@ function deleteUserById(id) {
         success: function (result) {
             if (result.extend.count != 0) {
                 $('#delcfmModel').modal('hide');
+                loadPage(1);
+            } else {
+
+            }
+        }
+    })
+};
+
+// 弹出授予角色界面
+$(document).on('click', '.grantRole-btn', function () {
+    $('#roleList').empty();
+    $('#grantRoleModel').modal({
+        backdrop: 'static'
+    });
+    loadRole($(this).attr('grantRole-id')); // 加载角色列表
+    $('#user_grantrole_btn').attr('grantRole-id', $(this).attr('grantRole-id'));
+});
+
+// 加载角色列表
+function loadRole(id) {
+    $.ajax({
+        url: 'role/getRoles/',
+        type: 'GET',
+        data: "page=" + 1,
+        success: function (result) {
+            var roles = result.extend.rolePage.list;
+            $.each(roles, function (index, item) {
+                var role = $("<label></label>").append($("<input>").attr("type", "checkbox").attr("value", item.id)).append(item.name);
+                var div = $("<div></div>").addClass("checkbox");
+                div.append(role).appendTo("#roleList");
+            });
+            loadRoleByUserId(id); //加载指定用户授予的角色
+        }
+    })
+};
+
+// 加载指定用户授予的角色
+function loadRoleByUserId(id) {
+    $.ajax({
+        url : 'user/getRolesByUserId/' + id,
+        type : 'POST',
+        success : function (result) {
+            var userRoles = result.extend.userRoles;
+            $.each(userRoles, function (index, item) {
+                $("input:checkbox[value='" + item.roleId + "']").attr('checked','true');
+            })
+        }
+    })
+}
+
+// 保存用户-角色关系
+$("#user_grantrole_btn").click(function () {
+    var id = $('#user_grantrole_btn').attr('grantRole-id')
+    var chk_value = [];
+    $.each($('input:checkbox:checked'), function () {
+        chk_value.push($(this).val());
+    });
+    saveUserAndRoleByUserId(id, chk_value);
+});
+
+// 根据用户ID保存用户和角色关系
+function saveUserAndRoleByUserId(userId,roleIds) {
+    $.ajax({
+        url: 'user/addUserAndRoleByUserId/' + userId,
+        type: 'POST',
+        data : "roleIds=" + roleIds ,
+        success: function (result) {
+            if (result.extend.count != 0) {
+                $('#grantRoleModel').modal('hide');
                 loadPage(1);
             } else {
 

@@ -45,25 +45,25 @@
                          aria-labelledby="collapseListGroupHeading1">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="#" id="1" rel="${ctx}/user/list">
+                                <a href="#" id="userControle" rel="${ctx}/user/list">
                                     <i class="glyphicon glyphicon-user"></i>
                                     <span>用户管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="2" rel="${ctx}/role/list">
+                                <a href="#" id="roleControl" rel="${ctx}/role/list">
                                     <i class="glyphicon glyphicon-asterisk"></i>
                                     <span>角色管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="3" rel="${ctx}/resource/list">
+                                <a href="#" id="resourceControle" rel="${ctx}/resource/list">
                                     <i class="glyphicon glyphicon-file"></i>
                                     <span>资源管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="4" rel="${ctx}/organization/list">
+                                <a href="#" id="orgControl" rel="${ctx}/organization/list">
                                     <i class="glyphicon glyphicon-tasks"></i>
                                     <span>机构管理</span>
                                 </a>
@@ -83,13 +83,13 @@
                          aria-labelledby="collapseListGroupHeading2">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="#" id="5" rel="">
+                                <a href="#" id="todoControl" rel="">
                                     <i class="glyphicon glyphicon-bell"></i>
                                     <span>待办管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="6">
+                                <a href="#" id="doneControl">
                                     <i class="glyphicon glyphicon-wrench"></i>
                                     <span>已办管理</span>
                                 </a>
@@ -109,7 +109,7 @@
                          aria-labelledby="collapseListGroupHeading3">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="#" id="7">
+                                <a href="#" id="leaveControle">
                                     <i class="glyphicon glyphicon-paperclip"></i>
                                     <span>请假管理</span>
                                 </a>
@@ -129,13 +129,13 @@
                          aria-labelledby="collapseListGroupHeading4">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="#" id="8">
+                                <a href="#" id="definitionControl">
                                     <i class="glyphicon glyphicon-leaf"></i>
                                     <span>定义管理</span>
                                 </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="#" id="9">
+                                <a href="#" id="deployControl">
                                     <i class="glyphicon glyphicon-tint"></i>
                                     <span>部署管理</span>
                                 </a>
