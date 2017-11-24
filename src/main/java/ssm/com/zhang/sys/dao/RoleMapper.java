@@ -3,7 +3,6 @@ package ssm.com.zhang.sys.dao;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 import ssm.com.zhang.sys.domain.Role;
-import ssm.com.zhang.sys.domain.RoleSource;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 public interface RoleMapper {
 
     /**
-     * 查询所有Resource对象
+     * 查询所有Role对象
      */
     @Select("SELECT a.id," +
             "       a.name," +
@@ -57,7 +56,4 @@ public interface RoleMapper {
      * 根据id删除Role对象
      */
     int deleteByPrimaryKey(Integer id);
-
-    @Select("select role_id as roleId, resource_id as resourceId from sys_role_resource where role_id = #{roleId}")
-    List<RoleSource> selectByRoleId(Integer roleId);
 }

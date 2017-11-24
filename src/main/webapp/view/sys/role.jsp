@@ -30,16 +30,18 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">描述</label>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" id="description" name="description">
-                        </div>
                         <label class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-4">
                             <select class="form-control" id="status" name="status">
                                 <option value="0">启用</option>
                                 <option value="1">停用</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">描述</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="3" id="description" name="description"></textarea>
                         </div>
                     </div>
                 </form>
@@ -106,8 +108,7 @@
                         aria-hidden="true">×</span></button>
                 <h4 class="modal-title">提示信息</h4>
             </div>
-            <div class="modal-body">
-                <p>您确认要删除吗？</p>
+            <div class="modal-body" id="roleContent">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

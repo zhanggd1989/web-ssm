@@ -17,7 +17,6 @@ function loadPage() {
 
 // 加载资源信息
 function build_resource(result) {
-    $('#treeGrid').empty();
     var resourceList = result.extend.resourceList;
     var source =
         {
@@ -42,7 +41,6 @@ function build_resource(result) {
             localData: resourceList
         };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    // create Tree Grid
     $("#treeGrid").jqxTreeGrid(
         {
             width: '100%',
@@ -71,10 +69,30 @@ function build_resource(result) {
                 // 弹出删除资源界面
                 $(".resource-delete").click(function () {
                     var selection = $("#treeGrid").jqxTreeGrid('getSelection');
-                    $('#delcfmModel').modal({
-                        backdrop: 'static'
-                    });
-                    $('#resource_delete_btn').attr('deleteResource-id', selection[0].id);
+                    var resourceId = selection[0].id;
+                    $.ajax({
+                        url: 'role/getRolesByResourceId/' + resourceId,
+                        type: 'GET',
+                        success: function (result) {
+                            var roles = result.extend.roleList;
+                            if (roles.length != 0) {
+                                var roleNames = '';
+                                $.each(roles, function (index, item) {
+                                    roleNames += item.name + ',';
+                                });
+                                $('#resourceContent').html("请先解除角色【" + roleNames.substring(0, roleNames.length - 1) + "】与该资源的关系");
+                                $('#resource_delete_btn').attr('disabled', true);
+                            }
+                            else {
+                                $('#resourceContent').html("确认要删除吗？");
+                                $('#resource_delete_btn').attr('disabled', false);
+                            }
+                            $('#delcfmModel').modal({
+                                backdrop: 'static'
+                            });
+                            $('#resource_delete_btn').attr('deleteResource-id', selection[0].id);
+                        }
+                    })
                 });
             },
             columns:
@@ -117,23 +135,48 @@ function build_resource(result) {
                     }
                     }
                 ]
-        })
-    ;
+        }
+    );
 };
 
 // 弹出新增资源界面
 $("#resource_add_btn").click(function () {
-    $('#resourceModal form')[0].reset();
-    $("#dropDownButton").jqxDropDownButton('setContent', '');
     $('#resourceModal').modal({
         backdrop: 'static'
     });
+    $('#resourceModal form')[0].reset();
+    $("#dropDownButton").jqxDropDownButton('setContent', '');
     loadParentResource();
     $('#resourceLabel').html('添加资源');
     $('#resource_save_btn').text('保存');
 });
 
-// 根据资源ID查询资源信息
+// 保存资源信息
+$('#resource_save_btn').click(function () {
+    var url;
+    var btnText = $(this).text();
+    if (btnText == '保存') {
+        url = 'resource/addResource';
+    } else {
+        var id = $('#resource_save_btn').attr('editResource-id');
+        url = 'resource/editResourceById/' + id;
+    };
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: $('#resourceModal form').serialize(),
+        success: function (result) {
+            if (result.code == 100) {
+                $('#resourceModal').modal('hide');
+                loadPage();
+            } else {
+
+            }
+        }
+    })
+});
+
+// 根据资源id查询资源信息
 function getResourceById(id) {
     $.ajax({
         url: 'resource/getResourceById/' + id,
@@ -156,32 +199,6 @@ function getResourceById(id) {
     })
 };
 
-// 保存资源信息
-$('#resource_save_btn').click(function () {
-    var url;
-    var btnText = $(this).text();
-    if (btnText == '保存') {
-        url = 'resource/addResource';
-    } else {
-        var id = $('#resource_save_btn').attr('editResource-id');
-        url = 'resource/editResource/' + id;
-    };
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: $('#resourceModal form').serialize(),
-        success: function (result) {
-            if (result.code == 100) {
-                $('#resourceModal').modal('hide');
-                loadPage();
-                $("#treeGrid").jqxTreeGrid('expandAll');
-            } else {
-
-            }
-        }
-    })
-});
-
 // 加载父资源信息
 function loadParentResource() {
     $.ajax({
@@ -203,7 +220,6 @@ function loadParentResource() {
             var dataAdapter = new $.jqx.dataAdapter(source);
             dataAdapter.dataBind();
             var records = dataAdapter.getRecordsHierarchy('id', 'pid', 'items', [{name: 'name', map: 'label'}]);
-            // Create jqxDropDownButton
             $("#dropDownButton").jqxDropDownButton({width: 170, height: 28, theme: 'bootstrap'});
             $('#jqxTree').on('select', function (event) {
                 var args = event.args;

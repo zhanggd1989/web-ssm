@@ -60,6 +60,4 @@ public interface ResourceMapper {
      * 根据id删除Resource对象
      */
     int deleteByPrimaryKey(Integer id);
-
-
 }

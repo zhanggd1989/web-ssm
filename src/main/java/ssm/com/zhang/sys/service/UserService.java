@@ -3,10 +3,7 @@ package ssm.com.zhang.sys.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ssm.com.zhang.sys.dao.OrganizationMapper;
-import ssm.com.zhang.sys.dao.UserMapper;
-import ssm.com.zhang.sys.dao.UserOrgMapper;
-import ssm.com.zhang.sys.dao.UserRoleMapper;
+import ssm.com.zhang.sys.dao.*;
 import ssm.com.zhang.sys.domain.Organization;
 import ssm.com.zhang.sys.domain.User;
 import ssm.com.zhang.sys.domain.UserOrg;
@@ -57,6 +54,7 @@ public class UserService {
      * @author brian.zhang
      * @date 10/16/2017 14:22
      */
+    @Transactional(readOnly = true)
     public User getUserById(Integer id) {
         User user = userMapper.selectByPrimaryKey(id);
         UserOrg userOrg = userOrgMapper.selectByUserId(id);
@@ -103,6 +101,7 @@ public class UserService {
      * @date 10/11/2017 15:01
      */
     public int deleteUserById(Integer id) {
+        userRoleMapper.deleteByUserId(id);
         return userMapper.deleteByPrimaryKey(id);
     }
 
@@ -114,28 +113,42 @@ public class UserService {
      * @author brian.zhang
      * @date 11/6/2017 11:11
      */
-    public int addUserAndRoleByUserId(Integer userId, String roleIds) {
+    public int addUserAndRolesByUserId(Integer userId, String roleIds) {
         userRoleMapper.deleteByUserId(userId);
-        String[] roles = roleIds.split(",");
         int rt = 0;
-        for (String role : roles) {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(userId);
-            userRole.setRoleId(Integer.parseInt(role));
-            rt = userRoleMapper.insert(userRole);
+        if (roleIds != null && roleIds.length() > 0) {
+            String[] roles = roleIds.split(",");
+            for (String role : roles) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(userId);
+                userRole.setRoleId(Integer.parseInt(role));
+                rt += userRoleMapper.insert(userRole);
+            }
         }
         return rt;
     }
 
     /**
-     * 根据id查询用户的角色信息
+     * 根据角色id查询用户信息
      *
-     * @param [userId]
-     * @return int
+     * @param [roleId]
+     * @return java.util.List<ssm.com.zhang.sys.domain.User>
      * @author brian.zhang
-     * @date 11/7/2017 14:07
+     * @date 11/23/2017 09:04
      */
-    public List<UserRole> getRolesByUserId(Integer userId) {
-        return userRoleMapper.selectByUserId(userId);
+    @Transactional(readOnly = true)
+    public List<User> getUsersByRoleId(Integer roleId) {
+        return userRoleMapper.selectUsersByRoleId(roleId);
+    }
+
+    /**
+     * 根据组织id查询用户信息
+     * @param [organizationId]
+     * @return java.util.List<ssm.com.zhang.sys.domain.User>
+     * @author brian.zhang
+     * @date 11/24/2017 10:58
+     */
+    public List<User> getUsersByOrganizationId(Integer organizationId) {
+        return userOrgMapper.selectUsersByOrganizationId(organizationId);
     }
 }

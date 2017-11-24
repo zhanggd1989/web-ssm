@@ -91,7 +91,7 @@ public class OrganizationController {
      * @author brian.zhang
      * @date 10/11/2017 15:00
      */
-    @RequestMapping(value = "editOrganization/{id}")
+    @RequestMapping(value = "editOrganizationById/{id}")
     @ResponseBody
     public Msg editOrganizationById(@PathVariable Integer id, Organization organization) {
         organization.setId(id);

@@ -156,7 +156,7 @@
                 <h4 class="modal-title">提示信息</h4>
             </div>
             <div class="modal-body">
-                <p>您确认要删除吗？</p>
+                <p>确认要删除【用户】及【用户授予的角色】吗？</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

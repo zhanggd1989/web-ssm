@@ -16,7 +16,9 @@ public class Organization {
 
     private String address;
 
-    private String pid;
+    private Integer pid;
+
+    private String pName;
 
     private String status;
 
@@ -78,12 +80,20 @@ public class Organization {
         this.address = address == null ? null : address.trim();
     }
 
-    public String getPid() {
+    public Integer getPid() {
         return pid;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid == null ? null : pid.trim();
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
+    public String getpName() {
+        return pName;
+    }
+
+    public void setpName(String pName) {
+        this.pName = pName;
     }
 
     public String getStatus() {

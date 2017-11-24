@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <title>主页</title>
     <jsp:include page="inc.jsp"></jsp:include>
+    <script src="./../statics/js/index/dynamic_tabs.js"></script>
     <script src="./../statics/js/index/index.js"></script>
     <link rel="stylesheet" href="${ctx}/statics/css/index/index.css">
-    <script src="./../statics/js/index/dynamic_tabs.js"></script>
     <link rel="stylesheet" href="${ctx}/statics/css/index/dynamic_tabs.css">
 </head>
 <body style="padding: 50px">

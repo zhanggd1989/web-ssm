@@ -1,6 +1,7 @@
 package ssm.com.zhang.sys.domain;
 
 public class UserRole {
+
     private Integer id;
 
     private Integer userId;

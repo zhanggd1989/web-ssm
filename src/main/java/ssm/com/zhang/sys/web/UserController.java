@@ -97,7 +97,7 @@ public class UserController {
      * @author brian.zhang
      * @date 10/11/2017 15:00
      */
-    @RequestMapping(value = "editUser/{id}")
+    @RequestMapping(value = "editUserById/{id}")
     @ResponseBody
     public Msg editUserById(@PathVariable Integer id, User user) {
         user.setId(id);
@@ -128,25 +128,40 @@ public class UserController {
      * @author brian.zhang
      * @date 11/6/2017 11:09
      */
-    @RequestMapping(value = "addUserAndRoleByUserId/{userId}")
+    @RequestMapping(value = "addUserAndRolesByUserId/{userId}")
     @ResponseBody
-    public Msg addUserAndRoleByUserId(@PathVariable Integer userId, @RequestParam(value = "roleIds") String roleIds) {
-        int rt = userService.addUserAndRoleByUserId(userId, roleIds);
+    public Msg addUserAndRolesByUserId(@PathVariable Integer userId, @RequestParam(value = "roleIds") String roleIds) {
+        int rt = userService.addUserAndRolesByUserId(userId, roleIds);
         return Msg.success().add("count", rt);
     }
 
     /**
-     * 根据id查询用户的角色信息
+     * 根据角色id查询用户信息
      *
-     * @param [userId]
+     * @param [roleId]
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
-     * @date 11/7/2017 14:04
+     * @date 11/23/2017 09:01
      */
-    @RequestMapping(value = "getRolesByUserId/{userId}")
+    @RequestMapping(value = "getUsersByRoleId/{roleId}")
     @ResponseBody
-    public Msg getRolesByUserId(@PathVariable Integer userId) {
-        List<UserRole> userRoles = userService.getRolesByUserId(userId);
-        return Msg.success().add("userRoles", userRoles);
+    public Msg getUsersByRoleId(@PathVariable Integer roleId) {
+        List<User> userList = userService.getUsersByRoleId(roleId);
+        return Msg.success().add("userList", userList);
+    }
+
+    /**
+     * 根据组织id查询用户信息
+     *
+     * @param [organizationId]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/24/2017 10:57
+     */
+    @RequestMapping(value = "getUsersByOrganizationId/{organizationId}")
+    @ResponseBody
+    public Msg getUsersByOrganizationId(@PathVariable Integer organizationId) {
+        List<User> userList = userService.getUsersByOrganizationId(organizationId);
+        return Msg.success().add("userList", userList);
     }
 }

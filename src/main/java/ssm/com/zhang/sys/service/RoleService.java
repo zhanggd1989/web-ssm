@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ssm.com.zhang.sys.dao.RoleMapper;
+import ssm.com.zhang.sys.dao.RoleSourceMapper;
+import ssm.com.zhang.sys.dao.UserRoleMapper;
 import ssm.com.zhang.sys.domain.Role;
 import ssm.com.zhang.sys.domain.RoleSource;
+import ssm.com.zhang.sys.domain.UserRole;
 
 import java.util.List;
 
@@ -21,6 +24,12 @@ public class RoleService {
 
     @Autowired
     RoleMapper roleMapper;
+
+    @Autowired
+    UserRoleMapper userRoleMapper;
+
+    @Autowired
+    RoleSourceMapper roleSourceMapper;
 
     /**
      * 查询所有角色信息
@@ -80,18 +89,54 @@ public class RoleService {
      * @date 10/11/2017 15:01
      */
     public int deleteRoleById(Integer id) {
+        roleSourceMapper.deleteByRoleId(id);
         return roleMapper.deleteByPrimaryKey(id);
     }
 
     /**
-     * 根据id查询角色的资源信息
+     * 根据id查询用户的角色信息
      *
-     * @param [roleId]
-     * @return java.util.List<ssm.com.zhang.sys.domain.RoleSource>
+     * @param [userId]
+     * @return int
      * @author brian.zhang
-     * @date 11/8/2017 16:26
+     * @date 11/7/2017 14:07
      */
-    public List<RoleSource> getResourcesByRoleId(Integer roleId) {
-        return roleMapper.selectByRoleId(roleId);
+    public List<UserRole> getRolesByUserId(Integer userId) {
+        return userRoleMapper.selectByUserId(userId);
+    }
+
+    /**
+     * 新增角色-资源关心信息
+     *
+     * @param [roleId, resouceIds]
+     * @return int
+     * @author brian.zhang
+     * @date 11/22/2017 17:21
+     */
+    public int addRoleAndResourcesByRoleId(Integer roleId, String resourceIds) {
+        roleSourceMapper.deleteByRoleId(roleId);
+        int rt = 0;
+        if(resourceIds != null && resourceIds.length() > 0) {
+            String[] resources = resourceIds.split(",");
+            for (String resource : resources) {
+                RoleSource roleSource = new RoleSource();
+                roleSource.setRoleId(roleId);
+                roleSource.setResourceId(Integer.parseInt(resource));
+                rt = roleSourceMapper.insert(roleSource);
+            }
+        }
+        return rt;
+    }
+
+    /**
+     * 根据角色id查询资源信息
+     *
+     * @param [resourceId]
+     * @return java.util.List<ssm.com.zhang.sys.domain.Role>
+     * @author brian.zhang
+     * @date 11/24/2017 08:42
+     */
+    public List<Role> getRolesByResourceId(Integer resourceId) {
+        return roleSourceMapper.selectRolesByResourceId(resourceId);
     }
 }

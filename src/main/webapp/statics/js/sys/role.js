@@ -3,9 +3,6 @@ var id;
 // 初始化
 $(function () {
     loadPage(1);// 加载页面
-    // $(function () {
-    //     $("#myform").validate();
-    // });
 });
 
 // 加载页面
@@ -32,8 +29,8 @@ function build_role(result) {
     $.each(roles, function (index, item) {
         var name = $("<td></td>").append(item.name);
         var sequence = $("<td></td>").append(item.sequence);
-        var description = $("<td></td>").append(item.description);
         var status = $("<td></td>").append(item.status == 0 ? '启用' : '停用');
+        var description = $("<td></td>").append(item.description);
         var editRoleBtn = $("<button></button>").addClass("btn btn-primary btn-xs editRole-btn")
             .append($("<span></span>").addClass("glyphicon glyphicon-pencil"))
             .append("&nbsp;")
@@ -50,7 +47,7 @@ function build_role(result) {
             .append("分配资源");
         grantResourceBtn.attr('grantResource-id', item.id);
         var btn = $("<td></td>").append(editRoleBtn).append("&nbsp;").append(deleteRoleBtn).append("&nbsp;").append(grantResourceBtn);
-        $("<tr></tr>").append(name).append(sequence).append(description).append(status).append(btn)
+        $("<tr></tr>").append(name).append(sequence).append(status).append(description).append(btn)
             .appendTo("#roleTable tbody");
     });
 };
@@ -62,7 +59,7 @@ function build_page_info(result) {
         .append("总共" + result.extend.rolePage.pages + "页，")
         .append("总" + result.extend.rolePage.total + "条记录");
     totalRecord = result.extend.rolePage.total;
-}
+};
 
 // 加载分页信息
 function build_page_nav(result) {
@@ -112,113 +109,45 @@ function build_page_nav(result) {
 
     var navEle = $("<nav></nav>").append(ul);
     navEle.appendTo("#page_nav_area");
-}
-
-// function reset_form(element) {
-//     $(element)[0].reset();
-//     $(element).find('*').removeClass("has-error has-success");
-//     $(element).find(".help-block").text("");
-// }
+};
 
 // 弹出新增角色界面
 $("#role_add_btn").click(function () {
-    $('#roleModal form')[0].reset();
     $('#roleModal').modal({
         backdrop: 'static'
     });
+    $('#roleModal form')[0].reset();
     $('#roleLabel').html('添加角色');
     $('#role_save_btn').text('保存');
 });
-
-// 校验
-// function validate_add_form() {
-//     var loginName = $('#loginName').val();
-//     var regName = /^[a-zA-Z0-9_-]{3,16}$/;
-//     if (!regName.test(loginName)) {
-//         show_validata_msg('#loginName', 'error', '用户名必须是3到16位的字母与数字组合');
-//         return false;
-//     } else {
-//         show_validata_msg('#loginName', 'success', '');
-//     };
-// //            var email = $('#emal').val();
-// //            var regEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-// //            if(!regEmail.test(email)){
-// //                alert('邮箱格式不正确');
-// //                return false;
-// //            }
-//     return true;
-// }
-
-// function show_validata_msg(element, status, msg) {
-//     $(element).parent().removeClass("has-error has-success");
-//     $(element).next('span').text();
-//     if ('success' == status) {
-//         $(element).parent().attr("has-success");
-//     } else if ('error' == status) {
-//         $(element).parent().attr("has-error");
-//     }
-//     $(element).next("span").text(msg);
-// };
-// $('#loginName').change(function () {
-//     $.ajax({
-//         url: '/user/checkUser',
-//         data: 'loginName=' + $('#loginName').val(),
-//         type: 'POST',
-//         success: function (result) {
-//             if (result.code == 100) {
-//                 show_validata_msg('#loginName', "success", "用户名可用");
-//                 $('#user_save_btn').attr("ajax-va", "success");
-//             } else {
-//                 show_validata_msg('#loginName', "error", result.extend.va_msg);
-//                 $('#user_save_btn').attr("ajax-va", "error");
-//             }
-//         }
-//     })
-// });
 
 // 弹出修改角色界面
 $(document).on('click', '.editRole-btn', function () {
     $('#roleModal').modal({
         backdrop: 'static'
     });
-    getRole($(this).attr("editRole-id"));// 根据用户ID查询用户信息
+    getRoleById($(this).attr("editRole-id"));// 根据角色id查询角色信息
     $('#roleLabel').html('修改角色');
     $('#role_save_btn').text('更新');
     $('#role_save_btn').attr('editRole-id', $(this).attr('editRole-id'));
 });
 
-// 根据角色ID查询角色信息
-function getRole(id) {
-    $.ajax({
-        url: 'role/getRoleById/' + id,
-        type: 'GET',
-        success: function (result) {
-            var roleElement = result.extend.role;
-            $('#name').val(roleElement.name);
-            $('#sequence').val(roleElement.sequence);
-            $('#description').val(roleElement.description);
-            $('#status').val(roleElement.status);
-        }
-    })
-};
-
-// 保存用户信息
+// 保存角色信息
 $('#role_save_btn').click(function () {
     var url;
     var btnText = $(this).text();
-    // if (!validate_add_form()) {
-    //     return false;
-    // }
-    // ;
+
     if ($(this).attr("ajax-va") == 'error') {
         return false;
     }
+    ;
     if (btnText == '保存') {
         url = 'role/addRole';
     } else {
         var id = $('#role_save_btn').attr('editRole-id');
         url = 'role/editRole/' + id;
     }
+    ;
     $.ajax({
         url: url,
         type: 'POST',
@@ -232,24 +161,56 @@ $('#role_save_btn').click(function () {
                     loadPage($('#page_nav_area').find('li.active a').html());
                 }
             } else {
-                // if (undefined != result.extend.fieldErrors.email) {
-                //     show_validata_msg('#email', 'error', result.extend.fieldErrors.email);
-                // }
-                // if (undefined != result.extend.fieldErrors.loginName) {
-                //     show_validata_msg('#email', 'error', result.extend.fieldErrors.loginName);
-                // }
             }
         }
     });
 });
 
+// 根据角色id查询角色信息
+function getRoleById(id) {
+    $.ajax({
+        url: 'role/getRoleById/' + id,
+        type: 'GET',
+        success: function (result) {
+            var roleElement = result.extend.role;
+            $('#name').val(roleElement.name);
+            $('#sequence').val(roleElement.sequence);
+            $('#description').val(roleElement.description);
+            $('#status').val(roleElement.status);
+        }
+    })
+};
+
 // 弹出删除角色界面
 $(document).on('click', '.deleteRole-btn', function () {
-    $('#delcfmModel').modal({
-        backdrop: 'static'
+    var roleId = $(this).attr('deleteRole-id');
+    $.ajax({
+        url: 'user/getUsersByRoleId/' + roleId,
+        type: 'GET',
+        success: function (result) {
+            var users = result.extend.userList;
+            if (users.length != 0) {
+                var userName = '';
+                $.each(users, function (index, item) {
+                    userName += item.realName + ',';
+                });
+                $('#roleContent').html("请先解除用户【" + userName.substring(0, userName.length - 1) + "】与该角色的关系");
+                $('#role_delete_btn').attr('disabled', true);
+            }
+            else {
+                $('#roleContent').html("确认要删除【角色】及【角色授予的资源】吗？");
+                $('#role_delete_btn').attr('disabled', false);
+
+            }
+            $('#delcfmModel').modal({
+                backdrop: 'static'
+            });
+            $('#role_delete_btn').attr('deleteRole-id', roleId);
+        }
     });
-    $('#role_delete_btn').attr('deleteRole-id', $(this).attr('deleteRole-id'));
 });
+
+// 删除角色信息
 $("#role_delete_btn").click(function () {
     var id = $('#role_delete_btn').attr('deleteRole-id');
     deleteRoleById(id);
@@ -273,12 +234,11 @@ function deleteRoleById(id) {
 
 // 弹出分配资源界面
 $(document).on('click', '.grantResource-btn', function () {
-    // $('#jqxWidget').empty();
     $('#grantResourceModel').modal({
         backdrop: 'static'
     });
     loadResource($(this).attr('grantResource-id')); // 加载资源列表
-    $('#user_grantrole_btn').attr('grantResource-id', $(this).attr('grantResource-id'));
+    $('#role_grantresource_btn').attr('grantResource-id', $(this).attr('grantResource-id'));
 });
 
 // 加载资源列表
@@ -299,19 +259,14 @@ function loadResource(id) {
                     id: 'id',
                     localdata: resourceList
                 };
-            // create data adapter.
             var dataAdapter = new $.jqx.dataAdapter(source);
-            // perform Data Binding.
             dataAdapter.dataBind();
-            // get the tree items. The first parameter is the item's id. The second parameter is the parent item's id. The 'items' parameter represents
-            // the sub items collection name. Each jqxTree item has a 'label' property, but in the JSON data, we have a 'text' field. The last parameter
-            // specifies the mapping between the 'text' and 'label' fields.
             var records = dataAdapter.getRecordsHierarchy('id', 'pid', 'items', [{name: 'name', map: 'label'}]);
             $('#jqxWidget').jqxTree({
                 source: records,
                 hasThreeStates: true,
                 checkboxes: true,
-                width: '100%'
+                height: '50%'
             });
             $("#jqxWidget").jqxTree('expandAll');
             loadResourceByRoleId(id); //加载指定角色分配的资源
@@ -322,14 +277,42 @@ function loadResource(id) {
 // 加载指定角色分配的资源
 function loadResourceByRoleId(id) {
     $.ajax({
-        url: 'role/getResourcesByRoleId/' + id,
+        url: 'resource/getResourcesByRoleId/' + id,
         type: 'POST',
         success: function (result) {
             var roleResources = result.extend.roleResource;
-            $.each(roleResources, function (index, item) {
-                console.log(item);
-                $("#jqxWidget").jqxTree('checkItem', $("#" + item.resourceId)[0], true);
-            })
+            if (roleResources.length != 0) {
+                $.each(roleResources, function (index, item) {
+                    $("#jqxWidget").jqxTree('checkItem', $("#" + item.resourceId)[0], true);
+                });
+            }
+        }
+    })
+};
+
+// 保存角色-资源关系
+$("#role_grantresource_btn").click(function () {
+    var id = $('#role_grantresource_btn').attr('grantResource-id')
+    var chk_value = [];
+    $.each($('#jqxWidget').jqxTree('getCheckedItems'), function (index, item) {
+        chk_value.push(item.id);
+    });
+    saveRoleAndResourcesByRoleId(id, chk_value);
+});
+
+// 根据角色id保存角色和资源关系
+function saveRoleAndResourcesByRoleId(roleId, resourceIds) {
+    $.ajax({
+        url: 'role/addRoleAndResourcesByRoleId/' + roleId,
+        type: 'POST',
+        data: "resourceIds=" + resourceIds,
+        success: function (result) {
+            if (result.code == 100) {
+                $('#grantResourceModel').modal('hide');
+                loadPage(1);
+            } else {
+
+            }
         }
     })
 };

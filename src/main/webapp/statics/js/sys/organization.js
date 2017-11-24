@@ -1,3 +1,4 @@
+// 初始化
 $(function () {
     loadPage();// 加载页面
 });
@@ -8,7 +9,8 @@ function loadPage() {
         url: '/organization/getOrganizations',
         type: 'GET',
         success: function (result) {
-            build_organization(result);// 加载机构信息
+            // 加载机构信息
+            build_organization(result);
         }
     })
 };
@@ -16,7 +18,6 @@ function loadPage() {
 // 加载机构信息
 function build_organization(result) {
     var organizationList = result.extend.organizationList;
-    // prepare the data
     var source =
         {
             dataType: "json",
@@ -39,11 +40,10 @@ function build_organization(result) {
             localData: organizationList
         };
     var dataAdapter = new $.jqx.dataAdapter(source);
-    // create Tree Grid
     $("#treeGrid").jqxTreeGrid(
         {
             width: '100%',
-            height: '100%',
+            height: '80%',
             source: dataAdapter,
             filterable: true,
             altRows: true,
@@ -53,7 +53,7 @@ function build_organization(result) {
                 $("#treeGrid").jqxTreeGrid('expandAll');
             },
             rendered: function () {
-                // 编辑机构
+                // 弹出编辑机构界面
                 $(".organization-edit").click(function () {
                     var selection = $("#treeGrid").jqxTreeGrid('getSelection');
                     $('#organizationModal').modal({
@@ -61,17 +61,37 @@ function build_organization(result) {
                     });
                     $('#organizationLabel').html('编辑机构');
                     $('#organization_save_btn').text('更新');
-                    $('#organization_save_btn').attr('edit_id', selection[0].id);
+                    $('#organization_save_btn').attr('editOrganization-id', selection[0].id);
                     getOrganizationById(selection[0].id);
                     loadParentOrganization();
                 });
-                // 删除机构
+                // 弹出删除机构界面
                 $(".organization-delete").click(function () {
                     var selection = $("#treeGrid").jqxTreeGrid('getSelection');
-                    $('#delcfmModel').modal({
-                        backdrop: 'static'
-                    });
-                    $('#organization_delete_btn').attr('delete_id', selection[0].id);
+                    var organizaitonId = selection[0].id;
+                    $.ajax({
+                        url : 'user/getUsersByOrganizationId/' + organizaitonId,
+                        type : 'GET',
+                        success : function (result) {
+                            var users = result.extend.userList;
+                            if (users.length != 0) {
+                                var userNames = '';
+                                $.each(users, function (index, item) {
+                                    userNames += item.realName + ',';
+                                });
+                                $('#organizationContent').html("请先解除用户【" + userNames.substring(0, userNames.length - 1) + "】与该机构的关系");
+                                $('#organization_delete_btn').attr('disabled', true);
+                            }
+                            else {
+                                $('#organizationContent').html("确认要删除吗？");
+                                $('#organization_delete_btn').attr('disabled', false);
+                            }
+                            $('#delcfmModel').modal({
+                                backdrop: 'static'
+                            });
+                            $('#organization_delete_btn').attr('deleteOrganization-id', selection[0].id);
+                        }
+                    })
                 });
             },
             columns:
@@ -107,8 +127,8 @@ function build_organization(result) {
                     },
                     {
                         text: '操作', align: 'center', cellsRenderer: function (row, column, value, rowData) {
-                        var editOrganizationBtn = "<input type='button' value='编辑' class='btn btn-primary btn-xs organization-edit'/>";
-                        var deleteOrganizationBtn = "<input type='button' value='删除' class='btn btn btn-danger btn-xs organization-delete'/>";
+                        var editOrganizationBtn = "<button class='btn btn-primary btn-xs organization-edit'><span class='glyphicon glyphicon-pencil'></span>编辑</button>";
+                        var deleteOrganizationBtn = "<button class='btn btn-danger btn-xs organization-delete'><span class='glyphicon glyphicon-trash'></span>删除</button>";
                         return editOrganizationBtn + "&nbsp;" + deleteOrganizationBtn;
                     }
                     }
@@ -117,7 +137,44 @@ function build_organization(result) {
     ;
 };
 
-// 根据id查询机构信息
+// 弹出新增机构界面
+$("#organization_add_btn").click(function () {
+    $('#organizationModal').modal({
+        backdrop: 'static'
+    });
+    $('#organizationModal form')[0].reset();
+    $("#dropDownButton").jqxDropDownButton('setContent', '');
+    loadParentOrganization();
+    $('#organizationLabel').html('添加机构');
+    $('#organization_save_btn').text('保存');
+});
+
+// 保存机构信息
+$('#organization_save_btn').click(function () {
+    var url;
+    var btnText = $(this).text();
+    if (btnText == '保存') {
+        url = 'organization/addOrganization';
+    } else {
+        var id = $('#organization_save_btn').attr('editOrganization-id');
+        url = 'organization/editOrganizationById/' + id;
+    };
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: $('#organizationModal form').serialize(),
+        success: function (result) {
+            if (result.code == 100) {
+                $('#organizationModal').modal('hide');
+                loadPage();
+            } else {
+
+            }
+        }
+    })
+});
+
+// 根据组织id查询机构信息
 function getOrganizationById(id) {
     $.ajax({
         url: 'organization/getOrganizationById/' + id,
@@ -131,6 +188,7 @@ function getOrganizationById(id) {
                 $('#type').val(organizationElement.type);
                 $('#address').val(organizationElement.address);
                 $('#pid').val(organizationElement.pid);
+                $("#dropDownButton").jqxDropDownButton('setContent', '<div style="position: relative; margin-left: 3px; margin-top: 5px; font-size: 14px; padding: 1px 12px; color: #555;">' + organizationElement.pName + '</div>');
                 $('#status').val(organizationElement.status);
             } else {
 
@@ -138,62 +196,6 @@ function getOrganizationById(id) {
         }
     })
 };
-// 保存机构信息
-$('#organization_save_btn').click(function () {
-    var url;
-    if ($(this).text() == '保存') {
-        url = 'organization/addOrganization';
-    } else {
-        var id = $('#organization_save_btn').attr('edit_id');
-        url = 'organization/editOrganization/' + id;
-    }
-    ;
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: $('#organizationModal form').serialize(),
-        success: function (result) {
-            if (result.code == 100) {
-                $('#organizationModal').modal('hide');
-                loadPage();
-                $("#treeGrid").jqxTreeGrid('expandAll');
-            } else {
-
-            }
-        }
-    })
-});
-// 删除机构信息
-$('#organization_delete_btn').click(function () {
-    var id = $('#organization_delete_btn').attr('delete_id');
-    deleteOrganizationById(id);
-});
-
-// 根据id删除机构信息
-function deleteOrganizationById(id) {
-    $.ajax({
-        url: 'organization/deleteOrganizationById/' + id,
-        type: 'POST',
-        success: function (result) {
-            if (result.extend.count != 0) {
-                $('#delcfmModel').modal('hide');
-                loadPage();
-            } else {
-
-            }
-        }
-    })
-};
-// 新增机构信息
-$("#organization_add_btn").click(function () {
-    $('#organizationModal form')[0].reset();
-    $('#organizationModal').modal({
-        backdrop: 'static'
-    });
-    $('#organizationLabel').html('添加机构');
-    $('#organization_save_btn').text('保存');
-    loadParentOrganization();
-});
 
 // 加载父机构信息
 function loadParentOrganization() {
@@ -216,7 +218,6 @@ function loadParentOrganization() {
             var dataAdapter = new $.jqx.dataAdapter(source);
             dataAdapter.dataBind();
             var records = dataAdapter.getRecordsHierarchy('id', 'pid', 'items', [{name: 'name', map: 'label'}]);
-            // Create jqxDropDownButton
             $("#dropDownButton").jqxDropDownButton({width: 170, height: 28, theme: 'bootstrap'});
             $('#jqxTree').on('select', function (event) {
                 var args = event.args;
@@ -234,3 +235,27 @@ function loadParentOrganization() {
         }
     });
 };
+
+// 删除机构信息
+$('#organization_delete_btn').click(function () {
+    var id = $('#organization_delete_btn').attr('deleteOrganization-id');
+    deleteOrganizationById(id);
+});
+
+// 根据id删除机构信息
+function deleteOrganizationById(id) {
+    $.ajax({
+        url: 'organization/deleteOrganizationById/' + id,
+        type: 'POST',
+        success: function (result) {
+            if (result.extend.count != 0) {
+                $('#delcfmModel').modal('hide');
+                loadPage();
+            } else {
+
+            }
+        }
+    })
+};
+
+

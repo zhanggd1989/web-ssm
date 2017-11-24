@@ -1,6 +1,7 @@
 package ssm.com.zhang.sys.domain;
 
 public class RoleSource {
+
     private Integer id;
 
     private Integer roleId;

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
     <title>资源信息</title>
@@ -108,8 +108,7 @@
                         aria-hidden="true">×</span></button>
                 <h4 class="modal-title">提示信息</h4>
             </div>
-            <div class="modal-body">
-                <p>您确认要删除吗？</p>
+            <div class="modal-body" id="resourceContent">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

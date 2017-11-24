@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ssm.com.zhang.sys.domain.Msg;
 import ssm.com.zhang.sys.domain.Role;
 import ssm.com.zhang.sys.domain.RoleSource;
+import ssm.com.zhang.sys.domain.UserRole;
 import ssm.com.zhang.sys.service.RoleService;
 
 import java.util.List;
@@ -121,17 +122,47 @@ public class RoleController {
     }
 
     /**
-     * 根据id查询角色资源信息
+     * 根据id查询用户的角色信息
      *
-     * @param [roleId]
+     * @param [userId]
      * @return ssm.com.zhang.sys.domain.Msg
      * @author brian.zhang
-     * @date 11/8/2017 16:22
+     * @date 11/7/2017 14:04
      */
-    @RequestMapping(value = "getResourcesByRoleId/{roleId}")
+    @RequestMapping(value = "getRolesByUserId/{userId}")
     @ResponseBody
-    public Msg getResourcesByRoleId(@PathVariable Integer roleId) {
-        List<RoleSource> roleResource = roleService.getResourcesByRoleId(roleId);
-        return Msg.success().add("roleResource", roleResource);
+    public Msg getRolesByUserId(@PathVariable Integer userId) {
+        List<UserRole> userRoles = roleService.getRolesByUserId(userId);
+        return Msg.success().add("userRoles", userRoles);
+    }
+
+    /**
+     * 根据id新增角色-资源关系信息
+     *
+     * @param [roleId, resouceIds]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/22/2017 17:17
+     */
+    @RequestMapping(value = "addRoleAndResourcesByRoleId/{roleId}")
+    @ResponseBody
+    public Msg addRoleAndResourcesByRoleId(@PathVariable Integer roleId, @RequestParam(value = "resourceIds") String resourceIds) {
+        int rt = roleService.addRoleAndResourcesByRoleId(roleId, resourceIds);
+        return Msg.success().add("count", rt);
+    }
+
+    /**
+     * 根据资源id查询角色信息
+     *
+     * @param [resourceId]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/24/2017 08:41
+     */
+    @RequestMapping(value = "getRolesByResourceId/{resourceId}")
+    @ResponseBody
+    public Msg getRolesByResourceId(@PathVariable Integer resourceId) {
+        List<Role> roleList = roleService.getRolesByResourceId(resourceId);
+        return Msg.success().add("roleList", roleList);
     }
 }

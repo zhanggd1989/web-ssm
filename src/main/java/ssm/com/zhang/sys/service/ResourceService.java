@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ssm.com.zhang.sys.dao.ResourceMapper;
+import ssm.com.zhang.sys.dao.RoleSourceMapper;
 import ssm.com.zhang.sys.domain.Resource;
+import ssm.com.zhang.sys.domain.RoleSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,9 @@ public class ResourceService {
 
     @Autowired
     ResourceMapper resourceMapper;
+
+    @Autowired
+    RoleSourceMapper roleSourceMapper;
 
     /**
      * 查询所有资源信息
@@ -88,47 +93,61 @@ public class ResourceService {
         return resourceMapper.deleteByPrimaryKey(id);
     }
 
-    /**
-     * 查询资源树-1
-     *
-     * @param [resourceList]
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
-     * @author brian.zhang
-     * @date 10/11/2017 16:06
-     */
-    public List<Map<String, Object>> oragnizationTree(List<Resource> resourceList) {
-        List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map1 = new HashMap<String, Object>();
-        for (Resource Resource : resourceList) {
-            if (Resource.getPid() == null) {
-                map1.put("text", Resource.getName());
-                map1.put("nodes", ResourceChildrenTree(Resource.getId(), resourceList));
-                list1.add(map1);
-            }
-        }
-        return list1;
-    }
 
     /**
-     * 查询资源树-2
+     * 根据id查询角色的资源信息
      *
-     * @param [pid, resourceList]
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     * @param [roleId]
+     * @return java.util.List<ssm.com.zhang.sys.domain.RoleSource>
      * @author brian.zhang
-     * @date 10/11/2017 16:07
+     * @date 11/8/2017 16:26
      */
-    public List<Map<String, Object>> ResourceChildrenTree(Integer pid, List<Resource> resourceList) {
-        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
-        for (Resource Resource : resourceList) {
-            if (String.valueOf(pid).equals(Resource.getPid())) {
-                Map<String, Object> map2 = new HashMap<String, Object>();
-                map2.put("text", Resource.getName());
-                if (ResourceChildrenTree(Resource.getId(), resourceList).size() != 0) {
-                    map2.put("nodes", ResourceChildrenTree(Resource.getId(), resourceList));
-                }
-                list2.add(map2);
-            }
-        }
-        return list2;
+    public List<RoleSource> getResourcesByRoleId(Integer roleId) {
+        return roleSourceMapper.selectByRoleId(roleId);
     }
+
+//        /**
+//         * 查询资源树-1
+//         *
+//         * @param [resourceList]
+//         * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+//         * @author brian.zhang
+//         * @date 10/11/2017 16:06
+//         */
+//    public List<Map<String, Object>> resourceTree(List<Resource> resourceList) {
+//        List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+//        Map<String, Object> map1 = new HashMap<String, Object>();
+//        for (Resource Resource : resourceList) {
+//            if (Resource.getPid() == null) {
+//                map1.put("text", Resource.getName());
+//                map1.put("nodes", ResourceChildrenTree(Resource.getId(), resourceList));
+//                list1.add(map1);
+//            }
+//        }
+//        return list1;
+//    }
+//
+//    /**
+//     * 查询资源树-2
+//     *
+//     * @param [pid, resourceList]
+//     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+//     * @author brian.zhang
+//     * @date 10/11/2017 16:07
+//     */
+//    public List<Map<String, Object>> ResourceChildrenTree(Integer pid, List<Resource> resourceList) {
+//        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+//        for (Resource Resource : resourceList) {
+//            if (String.valueOf(pid).equals(Resource.getPid())) {
+//                Map<String, Object> map2 = new HashMap<String, Object>();
+//                map2.put("text", Resource.getName());
+//                if (ResourceChildrenTree(Resource.getId(), resourceList).size() != 0) {
+//                    map2.put("nodes", ResourceChildrenTree(Resource.getId(), resourceList));
+//                }
+//                list2.add(map2);
+//            }
+//        }
+//        return list2;
+//    }
+
 }

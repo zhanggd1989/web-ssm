@@ -3,6 +3,7 @@ package ssm.com.zhang.sys.domain;
 import java.util.Date;
 
 public class Resource {
+
     private Integer id;
 
     private String name;

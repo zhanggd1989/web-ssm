@@ -46,7 +46,10 @@ public class OrganizationService {
      * @date 10/11/2017 16:04
      */
     public Organization getOrganizationById(Integer id) {
-        return organizationMapper.selectByPrimaryKey(id);
+        Organization organization = organizationMapper.selectByPrimaryKey(id);
+        Organization pOrganization = organizationMapper.selectByPrimaryKey(organization.getPid());
+        organization.setpName(pOrganization.getName());
+        return organization;
     }
 
     /**
@@ -85,47 +88,47 @@ public class OrganizationService {
         return organizationMapper.deleteByPrimaryKey(id);
     }
 
-    /**
-     * 查询机构树-1
-     *
-     * @param [organizationList]
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
-     * @author brian.zhang
-     * @date 10/11/2017 16:06
-     */
-    public List<Map<String, Object>> oragnizationTree(List<Organization> organizationList) {
-        List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map1 = new HashMap<String, Object>();
-        for (Organization organization : organizationList) {
-            if (organization.getPid() == null) {
-                map1.put("text", organization.getName());
-                map1.put("nodes", organizationChildrenTree(organization.getId(), organizationList));
-                list1.add(map1);
-            }
-        }
-        return list1;
-    }
-
-    /**
-     * 查询机构树-2
-     *
-     * @param [pid, organizationList]
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
-     * @author brian.zhang
-     * @date 10/11/2017 16:07
-     */
-    public List<Map<String, Object>> organizationChildrenTree(Integer pid, List<Organization> organizationList) {
-        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
-        for (Organization organization : organizationList) {
-            if (String.valueOf(pid).equals(organization.getPid())) {
-                Map<String, Object> map2 = new HashMap<String, Object>();
-                map2.put("text", organization.getName());
-                if (organizationChildrenTree(organization.getId(), organizationList).size() != 0) {
-                    map2.put("nodes", organizationChildrenTree(organization.getId(), organizationList));
-                }
-                list2.add(map2);
-            }
-        }
-        return list2;
-    }
+//    /**
+//     * 查询机构树-1
+//     *
+//     * @param [organizationList]
+//     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+//     * @author brian.zhang
+//     * @date 10/11/2017 16:06
+//     */
+//    public List<Map<String, Object>> oragnizationTree(List<Organization> organizationList) {
+//        List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+//        Map<String, Object> map1 = new HashMap<String, Object>();
+//        for (Organization organization : organizationList) {
+//            if (organization.getPid() == null) {
+//                map1.put("text", organization.getName());
+//                map1.put("nodes", organizationChildrenTree(organization.getId(), organizationList));
+//                list1.add(map1);
+//            }
+//        }
+//        return list1;
+//    }
+//
+//    /**
+//     * 查询机构树-2
+//     *
+//     * @param [pid, organizationList]
+//     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+//     * @author brian.zhang
+//     * @date 10/11/2017 16:07
+//     */
+//    public List<Map<String, Object>> organizationChildrenTree(Integer pid, List<Organization> organizationList) {
+//        List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+//        for (Organization organization : organizationList) {
+//            if (String.valueOf(pid).equals(organization.getPid())) {
+//                Map<String, Object> map2 = new HashMap<String, Object>();
+//                map2.put("text", organization.getName());
+//                if (organizationChildrenTree(organization.getId(), organizationList).size() != 0) {
+//                    map2.put("nodes", organizationChildrenTree(organization.getId(), organizationList));
+//                }
+//                list2.add(map2);
+//            }
+//        }
+//        return list2;
+//    }
 }

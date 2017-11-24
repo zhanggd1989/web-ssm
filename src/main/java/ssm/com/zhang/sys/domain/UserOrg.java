@@ -1,6 +1,7 @@
 package ssm.com.zhang.sys.domain;
 
 public class UserOrg {
+
     private Integer id;
 
     private Integer userId;
@@ -29,14 +30,5 @@ public class UserOrg {
 
     public void setOrgId(Integer orgId) {
         this.orgId = orgId;
-    }
-
-    @Override
-    public String toString() {
-        return "UserOrg{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", orgId=" + orgId +
-                '}';
     }
 }

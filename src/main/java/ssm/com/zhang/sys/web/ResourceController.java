@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ssm.com.zhang.sys.domain.Msg;
 import ssm.com.zhang.sys.domain.Resource;
+import ssm.com.zhang.sys.domain.RoleSource;
 import ssm.com.zhang.sys.service.ResourceService;
 
 import java.util.List;
@@ -91,7 +92,7 @@ public class ResourceController {
      * @author brian.zhang
      * @date 10/11/2017 15:00
      */
-    @RequestMapping(value = "editResource/{id}")
+    @RequestMapping(value = "editResourceById/{id}")
     @ResponseBody
     public Msg editResourceById(@PathVariable Integer id, Resource resource) {
         resource.setId(id);
@@ -112,5 +113,20 @@ public class ResourceController {
     public Msg deleteResourceById(@PathVariable Integer id) {
         int rt = resourceService.deleteResourceById(id);
         return Msg.success().add("count", rt);
+    }
+
+    /**
+     * 根据id查询角色资源信息
+     *
+     * @param [roleId]
+     * @return ssm.com.zhang.sys.domain.Msg
+     * @author brian.zhang
+     * @date 11/8/2017 16:22
+     */
+    @RequestMapping(value = "getResourcesByRoleId/{roleId}")
+    @ResponseBody
+    public Msg getResourcesByRoleId(@PathVariable Integer roleId) {
+        List<RoleSource> roleResource = resourceService.getResourcesByRoleId(roleId);
+        return Msg.success().add("roleResource", roleResource);
     }
 }
