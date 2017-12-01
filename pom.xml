@@ -21,6 +21,8 @@
         <slf4j.version>1.7.21</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
 
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
 
     <dependencies>
@@ -181,6 +183,7 @@
                     <overwrite>true</overwrite>
                 </configuration>
             </plugin>
+            
         </plugins>
     </build>
 </project>
