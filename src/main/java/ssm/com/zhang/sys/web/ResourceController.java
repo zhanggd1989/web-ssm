@@ -126,7 +126,7 @@ public class ResourceController {
     @RequestMapping(value = "getResourcesByRoleId/{roleId}")
     @ResponseBody
     public Msg getResourcesByRoleId(@PathVariable Integer roleId) {
-        List<RoleSource> roleResource = resourceService.getResourcesByRoleId(roleId);
+        List<RoleSource> roleResource = resourceService.getRoleResourcesByRoleId(roleId);
         return Msg.success().add("roleResource", roleResource);
     }
 }

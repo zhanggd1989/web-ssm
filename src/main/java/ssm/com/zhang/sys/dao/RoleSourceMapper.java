@@ -26,7 +26,7 @@ public interface RoleSourceMapper {
      * 根据roleId查询RoleSource对象
      */
     @Select("select role_id as roleId, resource_id as resourceId from sys_role_resource where role_id = #{roleId}")
-    List<RoleSource> selectByRoleId(Integer roleId);
+    List<RoleSource> selectRoleSourceByRoleId(Integer roleId);
 
     /**
      * 根据resourceId查询Role对象

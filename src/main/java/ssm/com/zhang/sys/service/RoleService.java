@@ -139,4 +139,17 @@ public class RoleService {
     public List<Role> getRolesByResourceId(Integer resourceId) {
         return roleSourceMapper.selectRolesByResourceId(resourceId);
     }
+
+
+    /**
+     *  根据登录名查询用户的角色信息
+     *
+     * @param [userLoginName]
+     * @return java.util.List<java.lang.String>
+     * @author brian.zhang
+     * @date 12/5/2017 14:07
+     */
+    public List<Role> getRolesByUserLoginName(String userLoginName) {
+        return roleMapper.selectByUserLoginName(userLoginName);
+    }
 }

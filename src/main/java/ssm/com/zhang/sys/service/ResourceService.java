@@ -8,10 +8,7 @@ import ssm.com.zhang.sys.dao.RoleSourceMapper;
 import ssm.com.zhang.sys.domain.Resource;
 import ssm.com.zhang.sys.domain.RoleSource;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 资源管理
@@ -95,15 +92,28 @@ public class ResourceService {
 
 
     /**
-     * 根据id查询角色的资源信息
+     * 根据id查询角色-资源的信息
      *
      * @param [roleId]
      * @return java.util.List<ssm.com.zhang.sys.domain.RoleSource>
      * @author brian.zhang
      * @date 11/8/2017 16:26
      */
-    public List<RoleSource> getResourcesByRoleId(Integer roleId) {
-        return roleSourceMapper.selectByRoleId(roleId);
+    public List<RoleSource> getRoleResourcesByRoleId(Integer roleId) {
+        return roleSourceMapper.selectRoleSourceByRoleId(roleId);
+    }
+
+
+    /**
+     * 根据角色id查询资源信息
+     *
+     * @param [roleId]
+     * @return java.util.List<ssm.com.zhang.sys.domain.Resource>
+     * @author brian.zhang
+     * @date 12/5/2017 14:34
+     */
+    public List<Resource> getResourcesByRoleId(Integer roleId) {
+        return resourceMapper.selectByRoleId(roleId);
     }
 
 //        /**

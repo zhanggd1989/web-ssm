@@ -56,4 +56,14 @@ public interface RoleMapper {
      * 根据id删除Role对象
      */
     int deleteByPrimaryKey(Integer id);
+
+    /**
+     * 根据用户的登录名查询Role对象
+     */
+    @Select("SELECT c.id, c.name " +
+            "FROM sys_user a, sys_user_role b, sys_role c " +
+            "WHERE a.login_name = #{userLoginName} " +
+            "AND a.id = b.user_id " +
+            "AND b.role_id = c.id")
+    List<Role> selectByUserLoginName(String userLoginName);
 }

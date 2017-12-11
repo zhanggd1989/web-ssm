@@ -60,4 +60,14 @@ public interface ResourceMapper {
      * 根据id删除Resource对象
      */
     int deleteByPrimaryKey(Integer id);
+
+    /**
+     * 根据角色id查询Resource对象
+     */
+    @Select("SELECT c.id, c.name " +
+            "FROM sys_role a, sys_role_resource b, sys_resource c " +
+            "WHERE a.id = #{roleId} " +
+            "AND a.id = b.role_id " +
+            "AND b.resource_id = c.id")
+    List<Resource> selectByRoleId(Integer roleId);
 }

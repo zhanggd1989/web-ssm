@@ -11,7 +11,7 @@
         $.ajax({
             type: "GET",
             url: url,
-            success: function( data ) {
+            success: function (data) {
                 $('#myTab').addTabs({
                     "id": "tab" + $(this).attr('id'),
                     "title": title,
@@ -20,4 +20,8 @@
             }
         });
     });
-});
+
+    $("#logout").click(function () {
+        window.location.href = '/logout';
+    });
+})

@@ -22,6 +22,10 @@
                             <label>密 码</label><input type="password" class="text" placeholder="密码" name="password" tabindex="2">
                         </div>
                         <div>
+                            <label><input name="rememberMe" type="checkbox" value="1" /></label>记住我
+
+                        </div>
+                        <div>
                             <input type="submit" class="button" tabindex="3" value="登录">
                             <input type="reset" class="button" tabindex="4" value="重置">
                         </div>

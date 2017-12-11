@@ -1,9 +1,13 @@
 package ssm.com.zhang.sys.service;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ssm.com.zhang.sys.dao.*;
+import ssm.com.zhang.sys.dao.OrganizationMapper;
+import ssm.com.zhang.sys.dao.UserMapper;
+import ssm.com.zhang.sys.dao.UserOrgMapper;
+import ssm.com.zhang.sys.dao.UserRoleMapper;
 import ssm.com.zhang.sys.domain.Organization;
 import ssm.com.zhang.sys.domain.User;
 import ssm.com.zhang.sys.domain.UserOrg;
@@ -73,6 +77,7 @@ public class UserService {
      * @date 10/16/2017 14:23
      */
     public int addUser(User user) {
+        user.setPassword(new Md5Hash(user.getPassword(), user.getLoginName(), 1).toHex());
         userMapper.insertSelective(user);
         UserOrg userOrg = new UserOrg();
         userOrg.setUserId(user.getId());
@@ -150,5 +155,18 @@ public class UserService {
      */
     public List<User> getUsersByOrganizationId(Integer organizationId) {
         return userOrgMapper.selectUsersByOrganizationId(organizationId);
+    }
+
+
+    /**
+     * 根据登录名查询用户信息
+     *
+     * @param [loginName]
+     * @return void
+     * @author brian.zhang
+     * @date 12/5/2017 15:01
+     */
+    public User getUserByUserLoginName(String loginName) {
+        return userMapper.selectByUserLoginName(loginName);
     }
 }

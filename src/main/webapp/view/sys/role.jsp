@@ -7,6 +7,12 @@
     <script src="${ctx}/statics/js/sys/role.js"></script>
 </head>
 <body>
+<shiro:hasRole name="管理员">
+    拥有admin角色
+</shiro:hasRole>
+<shiro:hasRole name="访客1">
+    拥有访客1角色
+</shiro:hasRole>
 <!-- 角色添加/修改界面 -->
 <div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleLabel">
     <div class="modal-dialog" role="document">

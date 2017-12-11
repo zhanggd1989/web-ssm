@@ -69,4 +69,11 @@ public interface UserMapper {
      */
     int deleteByPrimaryKey(Integer id);
 
+    /**
+     * 根据登录名查询User对象
+     */
+    @Select("SELECT id, login_name as loginName, real_name as realName, password " +
+            "FROM sys_user " +
+            "WHERE login_name = #{loginName}")
+    User selectByUserLoginName(String loginName);
 }

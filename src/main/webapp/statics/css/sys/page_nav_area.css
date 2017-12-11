@@ -28,3 +28,7 @@
 #page_nav_area {
     text-align: right;
 }
+
+#jqxWidget .jqx-checkbox {
+	margin-top: 4.5px !important;
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+
+    <!-- 系统缓存目录 -->
+    <diskStore path="java.io.tmpdir"/>
+    <!--
+              必选属性：
+        name：                            cache的名字，用来识别不同的cache,必须唯一。
+        maxElementsInMemory：             内存管理的缓存元素数量最大限值。
+        maxElementsOnDisk：               硬盘管理的缓存元素数量最大限值。默认值为0，表示没有限制，无穷大。
+        eternal：                         设定元素是否持久化，若为true，则缓存元素不会过期。
+        overflowToDisk：                  内存不足时，是否启用磁盘缓存。
+              可选属性：
+        timeToIdleSeconds：               设定元素在过期前空闲状态的时间，只对非持久性缓存对象有效。默认值为0,意味着元素可以闲置至无限长时间。
+        timeToLiveSeconds：               设定元素从创建到过期的时间。
+        diskPersistent：                  设定在虚拟机重启时是否进行磁盘存储，默认为false。
+        diskExpiryThreadIntervalSeconds： 磁盘失效线程运行时间间隔，默认是120秒
+        diskSpoolBufferSizeMB：           这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区
+        memoryStoreEvictionPolicy：       缓存满了之后的淘汰算法。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）
+     -->
+    <!--默认缓存-->
+    <defaultCache
+            maxElementsInMemory="3000"
+            eternal="false"
+            timeToIdleSeconds="3600"
+            timeToLiveSeconds="3600"
+            overflowToDisk="true"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="100"
+            memoryStoreEvictionPolicy="LRU">
+    </defaultCache>
+
+    <!-- 授权缓存 -->
+    <cache name="authorizationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <!-- 认证缓存 -->
+    <cache name="authenticationCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+
+    <cache name="shiro-activeSessionCache"
+           maxEntriesLocalHeap="10000"
+           overflowToDisk="false"
+           eternal="false"
+           diskPersistent="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           statistics="true"/>
+
+</ehcache>

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <html>
 <head>
@@ -25,6 +26,10 @@
                             <li><a href="#">字典管理</a></li>
                             <li><a href="#">流程管理</a></li>
                         </ul>
+                    </div>
+                    <div class="pull-right">
+                        欢迎: [<shiro:principal/>]
+                        <button type="button" class="btn btn-primary" id="logout">退出</button>
                     </div>
                 </div>
             </nav>
